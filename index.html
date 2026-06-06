@@ -1340,7 +1340,6 @@ function startGame() {
   canvas.width = app.clientWidth;
   canvas.height = app.clientHeight;
 
-  // Reset game state
   Object.assign(gameState, {
     running: true,
     energy: Math.min(100, state.energy + 0),
@@ -1365,7 +1364,6 @@ function startGame() {
 
   document.getElementById('game-over').style.display = 'none';
 
-  // Seed some initial markers
   for (let i = 0; i < 10; i++) {
     gameState.markers.push({
       y: canvas.height * 0.55 - i * 60,
@@ -1373,7 +1371,6 @@ function startGame() {
     });
   }
 
-  // Seed opponents
   gameState.opponents = [
     { x: canvas.width * 0.45, y: canvas.height * 0.38, speed: 2.2, phase: 0 },
     { x: canvas.width * 0.55, y: canvas.height * 0.28, speed: 1.8, phase: 1 },
@@ -1383,9 +1380,7 @@ function startGame() {
   gameState.raf = requestAnimationFrame(gameLoop);
 }
 
-/* ─── ROAD GEOMETRY ─── */
 function roadXAt(y) {
-  // Road narrows toward horizon
   const H = canvas.height;
   const horizon = H * 0.35;
   const t = Math.max(0, Math.min(1, (y - horizon) / (H - horizon)));
@@ -1393,14 +1388,11 @@ function roadXAt(y) {
   return { left: canvas.width / 2 - halfW, right: canvas.width / 2 + halfW };
 }
 
-/* ─── MAIN LOOP ─── */
 function gameLoop(ts) {
   if (!gameState.running) return;
   gameState.elapsed = ts - gameState.startTime;
-
   update(ts);
   render();
-
   gameState.raf = requestAnimationFrame(gameLoop);
 }
 
@@ -1408,26 +1400,21 @@ function update(ts) {
   const gs = gameState;
   const regen = energyRegenRate();
 
-  // Energy dynamics
   const drainRate = gs.boostActive ? 1.5 : 0.3;
   const regenPerFrame = 0.04 * regen;
   gs.energy = Math.max(0, Math.min(100, gs.energy - drainRate + regenPerFrame));
   state.energy = gs.energy;
 
-  // Speed
   const baseSpeed = 3 + (gs.energy / 100) * 2;
   gs.speed = gs.boostActive && gs.energy > 5 ? baseSpeed * 1.8 : baseSpeed;
 
-  // Player steering
   const road = roadXAt(canvas.height - 80);
   const playerW = 30;
   if (gs.keys.left)  gs.playerX = Math.max(road.left + playerW, gs.playerX - 4);
   if (gs.keys.right) gs.playerX = Math.min(road.right - playerW, gs.playerX + 4);
 
-  // Road markers (simulate forward motion)
   gs.markers.forEach(m => { m.y += gs.speed; });
 
-  // Remove off-screen markers, count for lap progress
   gs.markers = gs.markers.filter(m => {
     if (m.y > canvas.height + 10) {
       if (!m.counted) {
@@ -1441,19 +1428,16 @@ function update(ts) {
     return true;
   });
 
-  // Spawn new markers at horizon
   while (gs.markers.length < 12) {
     const last = gs.markers.length > 0 ? Math.min(...gs.markers.map(m => m.y)) : canvas.height * 0.55;
     gs.markers.push({ y: last - 60, counted: false });
   }
 
-  // Lap progression
   if (gs.lapProgress >= ROAD_MARKERS_PER_LAP) {
     gs.lapProgress = 0;
     const lapTime = ts - gs.lapStart;
     gs.lapTimes.push(lapTime);
     gs.lapStart = ts;
-
     if (gs.lap >= TOTAL_LAPS) {
       endGame();
       return;
@@ -1462,7 +1446,6 @@ function update(ts) {
     showToast(`¡Vuelta ${gs.lap}! 🏁`);
   }
 
-  // Spawn orbs
   if (Math.random() < 0.025 && gs.orbs.length < 6) {
     const oy = canvas.height * 0.45;
     const roadO = roadXAt(oy);
@@ -1470,13 +1453,8 @@ function update(ts) {
     gs.orbs.push({ x: ox, y: oy, r: 10, alpha: 1, pulse: Math.random() * Math.PI * 2 });
   }
 
-  // Move orbs
-  gs.orbs.forEach(o => {
-    o.y += gs.speed * 1.05;
-    o.pulse += 0.1;
-  });
+  gs.orbs.forEach(o => { o.y += gs.speed * 1.05; o.pulse += 0.1; });
 
-  // Collect orbs
   const px = gs.playerX;
   const py = canvas.height - 80;
   gs.orbs = gs.orbs.filter(o => {
@@ -1486,7 +1464,6 @@ function update(ts) {
       gs.score += 5;
       gs.sessionPoints += 5;
       gs.orbsCollected++;
-      // Spawn particles
       for (let i = 0; i < 6; i++) {
         gs.particles.push({
           x: o.x, y: o.y,
@@ -1500,19 +1477,14 @@ function update(ts) {
     return o.y < canvas.height + 20;
   });
 
-  // Particles
-  gs.particles.forEach(p => {
-    p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.life -= 0.04;
-  });
+  gs.particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.life -= 0.04; });
   gs.particles = gs.particles.filter(p => p.life > 0);
 
-  // Opponents wobble
   gs.opponents.forEach((op, i) => {
     op.phase += 0.02;
     op.x = canvas.width / 2 + Math.sin(op.phase + i * 2) * canvas.width * 0.12;
   });
 
-  // Update HUD
   document.getElementById('hud-pos').textContent = '2°';
   document.getElementById('hud-lap').textContent = `${gs.lap} / ${TOTAL_LAPS}`;
   document.getElementById('hud-time').textContent = fmtTime(gs.elapsed);
@@ -1520,7 +1492,6 @@ function update(ts) {
   document.getElementById('game-energy-bar').style.width = gs.energy + '%';
   document.getElementById('game-energy-pct').textContent = Math.round(gs.energy) + '%';
 
-  // Boost button state
   const bb = document.getElementById('boost-btn');
   if (gs.energy < 5) {
     bb.classList.add('disabled');
@@ -1530,28 +1501,24 @@ function update(ts) {
   }
 }
 
-/* ─── RENDER ─── */
 function render() {
   const gs = gameState;
   const W = canvas.width, H = canvas.height;
   const horizon = H * 0.35;
   const hudTop = 90, hudBot = 110;
 
-  // Sky gradient
   const sky = ctx.createLinearGradient(0, hudTop, 0, horizon);
   sky.addColorStop(0, '#004656');
   sky.addColorStop(1, '#047DBA');
   ctx.fillStyle = sky;
   ctx.fillRect(0, hudTop, W, horizon - hudTop);
 
-  // Ground / road base color
   const ground = ctx.createLinearGradient(0, horizon, 0, H - hudBot);
   ground.addColorStop(0, '#1a3a2a');
   ground.addColorStop(1, '#0d2015');
   ctx.fillStyle = ground;
   ctx.fillRect(0, horizon, W, H - horizon - hudBot);
 
-  // Road trapezoid
   const roadTop = roadXAt(horizon);
   const roadBot = roadXAt(H - hudBot);
   ctx.beginPath();
@@ -1566,7 +1533,6 @@ function render() {
   ctx.fillStyle = roadGrad;
   ctx.fill();
 
-  // Road edge lines
   ctx.strokeStyle = '#ffffff33';
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -1578,7 +1544,6 @@ function render() {
   ctx.lineTo(roadBot.right, H - hudBot);
   ctx.stroke();
 
-  // Center dashes
   ctx.strokeStyle = '#E0FF48';
   ctx.setLineDash([18, 18]);
   ctx.lineWidth = 2;
@@ -1596,15 +1561,12 @@ function render() {
   });
   ctx.setLineDash([]);
 
-  // Buildings
   drawBuildings(W, H, horizon, hudTop);
 
-  // Orbs
   gs.orbs.forEach(o => {
     if (o.y < horizon || o.y > H - hudBot) return;
     const pulse = 0.85 + Math.sin(o.pulse) * 0.15;
     const r = o.r * pulse;
-    // Glow
     const grd = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r * 2.5);
     grd.addColorStop(0, '#90FFBBcc');
     grd.addColorStop(1, '#90FFBB00');
@@ -1612,7 +1574,6 @@ function render() {
     ctx.beginPath();
     ctx.arc(o.x, o.y, r * 2.5, 0, Math.PI * 2);
     ctx.fill();
-    // Core
     ctx.fillStyle = '#90FFBB';
     ctx.beginPath();
     ctx.arc(o.x, o.y, r, 0, Math.PI * 2);
@@ -1622,7 +1583,6 @@ function render() {
     ctx.stroke();
   });
 
-  // Particles
   gs.particles.forEach(p => {
     ctx.globalAlpha = p.life;
     ctx.fillStyle = p.color;
@@ -1632,7 +1592,6 @@ function render() {
   });
   ctx.globalAlpha = 1;
 
-  // Opponent cars (pink, further up road)
   gs.opponents.forEach(op => {
     if (op.y > H - hudBot || op.y < horizon) return;
     const t = (op.y - horizon) / (H - hudBot - horizon);
@@ -1640,10 +1599,8 @@ function render() {
     drawCar(op.x, op.y, '#F3BDFF', scale);
   });
 
-  // Player car (yellow, bottom)
   drawCar(gs.playerX, H - 80, '#E0FF48', 1);
 
-  // Boost trail
   if (gs.boostActive && gs.energy > 5) {
     const trailGrd = ctx.createLinearGradient(gs.playerX, H - 60, gs.playerX, H - 60 + 50);
     trailGrd.addColorStop(0, '#E0FF4888');
@@ -1654,7 +1611,6 @@ function render() {
     ctx.fill();
   }
 
-  // Lap progress mini bar (thin strip just below HUD top)
   const lapPct = gs.lapProgress / ROAD_MARKERS_PER_LAP;
   ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.fillRect(0, hudTop, W, 4);
@@ -1664,11 +1620,9 @@ function render() {
 
 function drawBuildings(W, H, horizon, hudTop) {
   const bldData = [
-    // left side
     { x: 0, y: hudTop + 5, w: W * 0.28, h: horizon - hudTop - 5, color: '#004656', alpha: 0.85 },
     { x: W * 0.04, y: hudTop + 20, w: W * 0.18, h: horizon - hudTop - 30, color: '#047DBA', alpha: 0.6 },
     { x: W * 0.02, y: hudTop + 35, w: W * 0.14, h: horizon - hudTop - 50, color: '#E0FF4820', alpha: 1 },
-    // right side
     { x: W * 0.72, y: hudTop + 5, w: W * 0.28, h: horizon - hudTop - 5, color: '#004656', alpha: 0.85 },
     { x: W * 0.76, y: hudTop + 20, w: W * 0.18, h: horizon - hudTop - 30, color: '#F3BDFF', alpha: 0.4 },
     { x: W * 0.80, y: hudTop + 35, w: W * 0.14, h: horizon - hudTop - 50, color: '#90FFBB20', alpha: 1 },
@@ -1678,7 +1632,6 @@ function drawBuildings(W, H, horizon, hudTop) {
     ctx.globalAlpha = b.alpha;
     ctx.fillStyle = b.color;
     ctx.fillRect(b.x, b.y, b.w, b.h);
-    // Window grid
     ctx.globalAlpha = 0.25;
     ctx.fillStyle = '#ffffff';
     const cols = Math.floor(b.w / 12), rows = Math.floor(b.h / 16);
@@ -1692,7 +1645,6 @@ function drawBuildings(W, H, horizon, hudTop) {
     ctx.globalAlpha = 1;
   });
 
-  // moeve sign on left building
   ctx.save();
   ctx.fillStyle = '#E0FF48';
   ctx.font = 'bold 11px Nunito, sans-serif';
@@ -1710,31 +1662,26 @@ function drawCar(x, y, color, scale) {
   ctx.translate(x, y);
   ctx.scale(scale, scale);
 
-  // Shadow
   ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.beginPath();
   ctx.ellipse(0, 20, 22 * scale, 8 * scale, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Body
   ctx.fillStyle = color;
   ctx.beginPath();
   ctx.roundRect(-18, -14, 36, 28, 6);
   ctx.fill();
 
-  // Roof
   ctx.fillStyle = color === '#E0FF48' ? '#c8e800' : '#e0a0ff';
   ctx.beginPath();
   ctx.roundRect(-11, -24, 22, 14, 4);
   ctx.fill();
 
-  // Windshield
   ctx.fillStyle = 'rgba(0,70,86,0.6)';
   ctx.beginPath();
   ctx.roundRect(-9, -22, 18, 10, 3);
   ctx.fill();
 
-  // Wheels
   ctx.fillStyle = '#333';
   [[-16, -8], [16, -8], [-16, 10], [16, 10]].forEach(([wx, wy]) => {
     ctx.beginPath();
@@ -1747,7 +1694,6 @@ function drawCar(x, y, color, scale) {
     ctx.fillStyle = '#333';
   });
 
-  // Headlights / taillights
   ctx.fillStyle = color === '#E0FF48' ? '#ffffff' : '#ffcccc';
   ctx.fillRect(-16, -14, 8, 5);
   ctx.fillRect(8, -14, 8, 5);
@@ -1755,7 +1701,6 @@ function drawCar(x, y, color, scale) {
   ctx.restore();
 }
 
-/* ─── GAME END ─── */
 function endGame() {
   const gs = gameState;
   gs.running = false;
@@ -1765,7 +1710,6 @@ function endGame() {
   state.points += earnedPts;
   state.energy = gs.energy;
 
-  // Best lap
   if (gs.lapTimes.length > 0) {
     const bestThisRun = Math.min(...gs.lapTimes);
     if (!state.bestLap || bestThisRun < state.bestLap) {
@@ -1775,14 +1719,12 @@ function endGame() {
 
   saveState();
 
-  // Show overlay
   document.getElementById('go-score-line').textContent = `Orbes recogidos: ${gs.orbsCollected} · Tiempo: ${fmtTime(gs.elapsed)}`;
   document.getElementById('go-pts').textContent = '+' + fmtPts(earnedPts);
   document.getElementById('go-best').textContent = state.bestLap ? `Mejor vuelta: ${fmtTime(state.bestLap)}` : '';
   document.getElementById('game-over').style.display = 'flex';
 }
 
-/* ─── CONTROLS ─── */
 function pressKey(dir, down) {
   gameState.keys[dir] = down;
   const el = document.getElementById(dir === 'left' ? 'btn-left' : 'btn-right');
@@ -1794,7 +1736,6 @@ function pressBoost(down) {
   gameState.boostActive = down;
 }
 
-// Keyboard support
 document.addEventListener('keydown', e => {
   if (currentScreen !== 'game') return;
   if (e.key === 'ArrowLeft')  pressKey('left', true);
@@ -1808,7 +1749,6 @@ document.addEventListener('keyup', e => {
   if (e.key === ' ' || e.key === 'ArrowUp') pressBoost(false);
 });
 
-// Resize handler
 window.addEventListener('resize', () => {
   if (currentScreen === 'game' && canvas) {
     const app = document.getElementById('app');
@@ -1818,10 +1758,7 @@ window.addEventListener('resize', () => {
   }
 });
 
-/* ═══════════════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════════════ */
 updateHomeUI();
-</script>
+<\/script>
 </body>
 </html>
