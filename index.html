@@ -7,1758 +7,1161 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue: #047DBA; --dark-blue: #004656; --green: #90FFBB;
+  --yellow: #E0FF48; --pink: #F3BDFF; --bg: #F1F5F9;
+  --border: #DCE6F0; --text: #1a2b38; --muted: #6b7f90; --white: #fff;
+}
+html, body { width:100%; height:100%; overflow:hidden;
+  font-family:'Nunito',system-ui,sans-serif; background:var(--bg); color:var(--text); }
 
-  :root {
-    --blue: #047DBA;
-    --dark-blue: #004656;
-    --green: #90FFBB;
-    --yellow: #E0FF48;
-    --pink: #F3BDFF;
-    --bg: #F1F5F9;
-    --border: #DCE6F0;
-    --text: #1a2b38;
-    --text-muted: #6b7f90;
-    --white: #ffffff;
-  }
+#app { width:100%; max-width:430px; height:100%; margin:0 auto;
+  position:relative; overflow:hidden; background:var(--bg); }
 
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: 'Nunito', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-  }
+.screen { position:absolute; inset:0; display:none; flex-direction:column;
+  overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+.screen.active { display:flex; }
 
-  #app {
-    width: 100%;
-    max-width: 430px;
-    height: 100%;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden;
-    background: var(--bg);
-  }
+/* ── HEADER ── */
+.grad-hd { background:linear-gradient(135deg,var(--blue) 0%,#1bc78a 100%);
+  padding:46px 20px 22px; flex-shrink:0; }
+.grad-hd.sm { padding:42px 20px 18px; }
+.hd-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.logo { font-size:22px; font-weight:900; color:#fff; letter-spacing:-.5px; }
+.avatar { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.25);
+  border:2px solid rgba(255,255,255,.5); display:flex; align-items:center;
+  justify-content:center; font-weight:800; font-size:15px; color:#fff; }
+.hi { font-size:12px; font-weight:600; color:rgba(255,255,255,.7); margin-bottom:2px; }
+.hi-name { font-size:22px; font-weight:800; color:#fff; margin-bottom:2px; }
+.hi-sub { font-size:12px; font-weight:600; color:rgba(255,255,255,.65); }
 
-  .screen {
-    position: absolute;
-    inset: 0;
-    display: none;
-    flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-  .screen.active { display: flex; }
+/* ── BODY ── */
+.body { flex:1; overflow-y:auto; padding:14px 14px 96px;
+  display:flex; flex-direction:column; gap:11px; -webkit-overflow-scrolling:touch; }
 
-  /* ───────── GRADIENT HEADER ───────── */
-  .grad-header {
-    background: linear-gradient(135deg, var(--blue) 0%, #1bc78a 100%);
-    padding: 48px 20px 24px;
-    position: relative;
-    flex-shrink: 0;
-  }
-  .grad-header.compact { padding: 44px 20px 20px; }
+/* ── CARD ── */
+.card { background:#fff; border-radius:16px; border:1px solid var(--border); padding:15px; }
+.clabel { font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:7px; }
 
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
+/* ── POINTS ── */
+.pts-num { font-size:40px; font-weight:900; color:#1bc78a; line-height:1; letter-spacing:-1px; }
+.pts-sub { font-size:13px; font-weight:600; color:var(--muted); margin-top:3px; }
 
-  .wordmark {
-    font-size: 22px;
-    font-weight: 900;
-    color: var(--white);
-    letter-spacing: -0.5px;
-  }
+/* ── PROGRESS ── */
+.ptrack { height:10px; background:var(--bg); border-radius:99px;
+  overflow:hidden; border:1px solid var(--border); }
+.pfill { height:100%; border-radius:99px;
+  background:linear-gradient(90deg,var(--blue),#1bc78a); transition:width .4s; }
+.pfill.mint { background:linear-gradient(90deg,var(--green),#1bc78a); }
 
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.25);
-    border: 2px solid rgba(255,255,255,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 15px;
-    color: var(--white);
-  }
+.ebadge { background:var(--bg); border:1px solid var(--border); border-radius:20px;
+  padding:3px 10px; font-size:12px; font-weight:700; color:var(--blue); }
 
-  .greeting {
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.75);
-    margin-bottom: 2px;
-  }
-  .greeting-name {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--white);
-    margin-bottom: 2px;
-  }
-  .greeting-sub {
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.7);
-  }
+/* ── CHIPS ── */
+.chips { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+.chip { background:#fff; border:1px solid var(--border); border-radius:99px;
+  padding:4px 11px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:5px; }
+.dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
 
-  /* ───────── SCROLLABLE BODY ───────── */
-  .screen-body {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 16px 16px 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    -webkit-overflow-scrolling: touch;
-  }
+/* ── BUTTONS ── */
+.btn { border:none; border-radius:12px; font-family:inherit; font-weight:800;
+  font-size:14px; letter-spacing:.5px; cursor:pointer; padding:14px 18px;
+  transition:opacity .15s,transform .1s; -webkit-tap-highlight-color:transparent; }
+.btn:active { opacity:.85; transform:scale(.97); }
+.btn.blue { background:var(--blue); color:#fff; width:100%; }
+.btn.out  { background:transparent; color:var(--text); border:2px solid var(--border); width:100%; }
+.btn.grn  { background:var(--green); color:var(--dark-blue); width:100%; font-size:16px; }
+.btn-row  { display:flex; gap:9px; }
 
-  /* ───────── CARDS ───────── */
-  .card {
-    background: var(--white);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    padding: 16px;
-  }
+.bpts { background:var(--blue); color:#fff; border-radius:8px; padding:6px 11px;
+  font-size:12px; font-weight:800; border:none; cursor:pointer; white-space:nowrap;
+  -webkit-tap-highlight-color:transparent; font-family:inherit; }
+.bpts:active { opacity:.8; }
+.bpts.off { background:var(--bg); color:var(--muted); border:1px solid var(--border); cursor:default; }
 
-  .card-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-  }
+/* ── PROMO ── */
+.promo { background:linear-gradient(135deg,var(--dark-blue),var(--blue));
+  border-radius:16px; padding:15px; color:#fff; }
+.promo-tag { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  color:var(--green); margin-bottom:5px; }
+.promo-t { font-size:16px; font-weight:800; margin-bottom:3px; }
+.promo-s { font-size:12px; font-weight:600; opacity:.7; }
 
-  /* ───────── POINTS COUNTER ───────── */
-  .points-display {
-    text-align: center;
-    padding: 20px 16px 16px;
-  }
-  .points-number {
-    font-size: 40px;
-    font-weight: 900;
-    color: #1bc78a;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-  .points-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
+/* ── NAV ── */
+.nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:430px; padding:9px 14px 14px; background:#fff;
+  border-top:1px solid var(--border); display:flex; align-items:center;
+  justify-content:space-between; z-index:100; gap:4px; }
+.npill { display:flex; align-items:center; gap:3px; flex:1; justify-content:space-around;
+  background:var(--bg); border:1px solid var(--border); border-radius:99px; padding:5px 6px; }
+.ni { display:flex; flex-direction:column; align-items:center; gap:2px;
+  padding:4px 8px; border-radius:99px; cursor:pointer;
+  -webkit-tap-highlight-color:transparent; transition:background .15s; }
+.ni.on { background:var(--dark-blue); }
+.ni span { font-size:9px; font-weight:700; color:var(--muted); }
+.ni.on span { color:#fff; }
+.ni svg { opacity:.45; }
+.ni.on svg { opacity:1; }
+.npay { width:48px; height:48px; border-radius:50%; background:var(--green); border:none;
+  display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900;
+  color:var(--dark-blue); cursor:pointer; flex-shrink:0;
+  box-shadow:0 4px 12px rgba(0,70,86,.2); -webkit-tap-highlight-color:transparent; }
 
-  /* ───────── ENERGY BAR ───────── */
-  .energy-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .energy-title {
-    font-size: 15px;
-    font-weight: 700;
-  }
-  .energy-badge {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3px 10px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--blue);
-  }
-  .progress-track {
-    height: 10px;
-    background: var(--bg);
-    border-radius: 99px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, var(--blue), #1bc78a);
-    transition: width 0.4s ease;
-  }
-  .progress-fill.mint {
-    background: linear-gradient(90deg, var(--green), #1bc78a);
-  }
+/* ── BACK ── */
+.back-row { display:flex; align-items:center; gap:9px; }
+.back-btn { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.2);
+  border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:20px; -webkit-tap-highlight-color:transparent; }
+.stitle { font-size:18px; font-weight:800; color:#fff; }
 
-  /* ───────── CHIPS ───────── */
-  .chips-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-  }
-  .chip {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 5px 12px;
-    font-size: 12px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .chip-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+/* ── SOURCE CARDS ── */
+.src-card { background:#fff; border-radius:14px; border:1px solid var(--border);
+  padding:13px 13px 13px 0; display:flex; align-items:center; gap:11px;
+  overflow:hidden; margin-bottom:9px; }
+.src-bar { width:5px; align-self:stretch; border-radius:0 4px 4px 0; flex-shrink:0; min-height:58px; }
+.src-ico { font-size:22px; flex-shrink:0; }
+.src-info { flex:1; min-width:0; }
+.src-name { font-size:14px; font-weight:800; }
+.src-sub { font-size:11px; font-weight:600; color:var(--muted); margin-top:1px; }
+.src-bon { font-size:10px; font-weight:700; color:#1bc78a; margin-top:2px; }
 
-  /* ───────── BUTTONS ───────── */
-  .btn {
-    border: none;
-    border-radius: 12px;
-    font-family: inherit;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    padding: 14px 20px;
-    transition: opacity 0.15s, transform 0.1s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn:active { opacity: 0.85; transform: scale(0.97); }
+/* ── CHARGING ── */
+.chpct { font-size:56px; font-weight:900; color:var(--green); line-height:1; margin:6px 0 3px; }
+.chst { font-size:14px; font-weight:700; color:rgba(255,255,255,.8); margin-bottom:10px; }
+.tpill { background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.3);
+  border-radius:99px; padding:6px 13px; font-size:13px; font-weight:700; color:#fff;
+  display:inline-flex; align-items:center; gap:5px; margin-top:7px; }
+.inv-card { background:#fff; border-radius:14px; border:1px solid var(--border);
+  overflow:hidden; display:flex; }
+.inv-acc { width:5px; background:var(--green); flex-shrink:0; }
+.inv-body { flex:1; padding:13px; }
+.inv-name { font-size:15px; font-weight:800; margin-bottom:7px; }
+.inv-stats { display:flex; gap:14px; }
+.inv-sl { font-size:9px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.5px; color:var(--muted); }
+.inv-sv { font-size:14px; font-weight:800; }
+.info-card { background:#fff; border-radius:14px; border:1px solid var(--border); padding:15px; }
+.info-t { font-size:15px; font-weight:800; margin-bottom:11px; }
+.info-list { display:flex; flex-direction:column; gap:7px; }
+.info-i { display:flex; gap:7px; font-size:13px; font-weight:600; color:var(--muted); }
+.info-hl { font-size:13px; font-weight:700; color:var(--blue);
+  margin-top:11px; padding-top:11px; border-top:1px solid var(--border); }
 
-  .btn-primary {
-    background: var(--blue);
-    color: var(--white);
-    width: 100%;
-  }
-  .btn-outline {
-    background: transparent;
-    color: var(--text);
-    border: 2px solid var(--border);
-    width: 100%;
-  }
-  .btn-green {
-    background: var(--green);
-    color: var(--dark-blue);
-    width: 100%;
-    font-size: 16px;
-  }
-  .btn-yellow {
-    background: var(--yellow);
-    color: var(--dark-blue);
-  }
-  .btn-pts {
-    background: var(--blue);
-    color: var(--white);
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 12px;
-    font-weight: 800;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn-pts:active { opacity: 0.8; }
-  .btn-pts.disabled {
-    background: var(--bg);
-    color: var(--text-muted);
-    cursor: default;
-    border: 1px solid var(--border);
-  }
+/* ── TOAST ── */
+.toast { position:fixed; top:58px; left:50%; transform:translateX(-50%) translateY(-90px);
+  background:var(--dark-blue); color:#fff; padding:9px 18px; border-radius:99px;
+  font-size:13px; font-weight:700; z-index:999; transition:transform .28s ease;
+  pointer-events:none; white-space:nowrap; max-width:92%; font-family:inherit; }
+.toast.on { transform:translateX(-50%) translateY(0); }
 
-  .btn-row {
-    display: flex;
-    gap: 10px;
-  }
+/* ══════════════════════════════════
+   GAME SCREEN
+══════════════════════════════════ */
+#screen-game { background:#000; overflow:hidden; }
 
-  /* ───────── PROMO CARD ───────── */
-  .promo-card {
-    background: linear-gradient(135deg, var(--dark-blue), var(--blue));
-    border-radius: 16px;
-    padding: 16px;
-    color: var(--white);
-  }
-  .promo-card .promo-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 6px;
-  }
-  .promo-card .promo-title {
-    font-size: 16px;
-    font-weight: 800;
-    margin-bottom: 4px;
-  }
-  .promo-card .promo-sub {
-    font-size: 12px;
-    font-weight: 600;
-    opacity: 0.75;
-  }
+#gc { display:block; position:absolute; inset:0; touch-action:none; }
 
-  /* ───────── BOTTOM NAV ───────── */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 430px;
-    padding: 10px 16px 16px;
-    background: var(--white);
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 100;
-    gap: 4px;
-  }
+/* HUD top */
+.ghud-t { position:absolute; top:0; left:0; right:0; z-index:10;
+  background:linear-gradient(135deg,var(--blue),#1bc78a);
+  padding:38px 16px 10px; display:flex; justify-content:space-between; align-items:center; }
+.hs { display:flex; flex-direction:column; align-items:center; }
+.hs-l { font-size:9px; font-weight:700; letter-spacing:.8px; color:rgba(255,255,255,.7);
+  text-transform:uppercase; }
+.hs-v { font-size:20px; font-weight:900; color:#fff; line-height:1.1; }
+.hs-v.sm { font-size:15px; }
 
-  .nav-pill {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex: 1;
-    justify-content: space-around;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 6px 8px;
-  }
+/* HUD bottom */
+.ghud-b { position:absolute; bottom:0; left:0; right:0; z-index:10;
+  background:#fff; border-top:1px solid var(--border);
+  border-radius:20px 20px 0 0; padding:11px 14px 24px; }
+.e-row { display:flex; align-items:center; gap:9px; margin-bottom:10px; }
+.e-lbl { font-size:10px; font-weight:800; letter-spacing:.6px;
+  color:var(--muted); white-space:nowrap; text-transform:uppercase; }
+.ctrl { display:flex; gap:9px; align-items:center; }
 
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 4px 8px;
-    border-radius: 99px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s;
-  }
-  .nav-item.active {
-    background: var(--dark-blue);
-  }
-  .nav-item span {
-    font-size: 9px;
-    font-weight: 700;
-    color: var(--text-muted);
-  }
-  .nav-item.active span { color: var(--white); }
-  .nav-item svg { opacity: 0.5; }
-  .nav-item.active svg { opacity: 1; }
+.cbtn { flex:0 0 72px; height:60px; border-radius:16px; border:2px solid var(--border);
+  background:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:28px; cursor:pointer; -webkit-tap-highlight-color:transparent;
+  user-select:none; touch-action:none; transition:background .08s,transform .08s; }
+.cbtn.hit { background:var(--bg); transform:scale(.93); }
 
-  .nav-pay {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--green);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 900;
-    color: var(--dark-blue);
-    cursor: pointer;
-    flex-shrink: 0;
-    -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 4px 12px rgba(0,70,86,0.2);
-  }
+.bbtn { flex:1; height:60px; border-radius:16px; border:none; background:var(--yellow);
+  color:var(--dark-blue); font-size:16px; font-weight:900; letter-spacing:1px;
+  cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none;
+  touch-action:none; transition:background .08s,transform .08s; font-family:inherit; }
+.bbtn.on { background:#c8e600; transform:scale(.96); box-shadow:0 0 20px #E0FF4888; }
+.bbtn.off { background:var(--bg); color:var(--muted); }
 
-  /* ───────── SCREEN 1 – HOME ───────── */
-  #screen-home .grad-header {
-    padding-bottom: 8px;
-  }
+/* Game over */
+.gover { position:absolute; inset:0; background:rgba(0,70,86,.88);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:20; padding:28px; gap:14px; }
+.gover h2 { font-size:30px; font-weight:900; color:var(--yellow); text-align:center; }
+.gover .gsl { font-size:14px; font-weight:700; color:#fff; text-align:center; }
+.gcard { background:#fff; border-radius:16px; padding:18px; width:100%; text-align:center; }
+.gpts { font-size:38px; font-weight:900; color:#1bc78a; }
+.gptsl { font-size:12px; font-weight:600; color:var(--muted); }
 
-  /* ───────── SCREEN 2 – GAME ───────── */
-  #screen-game {
-    background: #000;
-    overflow: hidden;
-  }
-
-  #gameCanvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    touch-action: none;
-  }
-
-  .game-hud-top {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, var(--blue), #1bc78a);
-    padding: 38px 16px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 10;
-  }
-
-  .hud-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .hud-stat-label {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: rgba(255,255,255,0.7);
-    text-transform: uppercase;
-  }
-  .hud-stat-value {
-    font-size: 20px;
-    font-weight: 900;
-    color: var(--white);
-    line-height: 1.1;
-  }
-  .hud-stat-value.small { font-size: 15px; }
-
-  .game-hud-bottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    border-top: 1px solid var(--border);
-    border-radius: 20px 20px 0 0;
-    padding: 12px 16px 24px;
-    z-index: 10;
-  }
-
-  .energy-hud-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .energy-hud-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-
-  .control-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .ctrl-btn {
-    width: 64px;
-    height: 56px;
-    border-radius: 14px;
-    border: 2px solid var(--border);
-    background: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    touch-action: none;
-    transition: background 0.1s, transform 0.1s;
-  }
-  .ctrl-btn:active, .ctrl-btn.pressed {
-    background: var(--bg);
-    transform: scale(0.95);
-  }
-
-  .boost-btn {
-    flex: 1;
-    height: 56px;
-    border-radius: 14px;
-    border: none;
-    background: var(--yellow);
-    color: var(--dark-blue);
-    font-size: 15px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    touch-action: none;
-    transition: opacity 0.1s, transform 0.1s;
-  }
-  .boost-btn.active {
-    background: #c8e800;
-    transform: scale(0.97);
-  }
-  .boost-btn.disabled {
-    background: var(--bg);
-    color: var(--text-muted);
-  }
-
-  /* ───────── GAME OVER OVERLAY ───────── */
-  .game-over-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,70,86,0.85);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    padding: 32px;
-    gap: 16px;
-  }
-  .game-over-overlay h2 {
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--yellow);
-    text-align: center;
-  }
-  .game-over-overlay .score-line {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--white);
-    text-align: center;
-  }
-  .game-over-card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 20px;
-    width: 100%;
-    text-align: center;
-  }
-  .game-over-pts {
-    font-size: 36px;
-    font-weight: 900;
-    color: #1bc78a;
-  }
-  .game-over-pts-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-  }
-
-  /* ───────── SCREEN 3 – PLANTA ───────── */
-  .back-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .back-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-    color: white;
-    font-size: 18px;
-  }
-  .screen-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--white);
-  }
-
-  .source-card {
-    background: var(--white);
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    padding: 14px 14px 14px 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    overflow: hidden;
-    position: relative;
-  }
-  .source-accent {
-    width: 5px;
-    min-height: 60px;
-    border-radius: 0 4px 4px 0;
-    flex-shrink: 0;
-    align-self: stretch;
-  }
-  .source-icon {
-    font-size: 24px;
-    flex-shrink: 0;
-  }
-  .source-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .source-name {
-    font-size: 14px;
-    font-weight: 800;
-  }
-  .source-sub {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-top: 1px;
-  }
-  .source-bonus {
-    font-size: 10px;
-    font-weight: 700;
-    color: #1bc78a;
-    margin-top: 3px;
-  }
-
-  /* ───────── SCREEN 4 – CHARGING ───────── */
-  .charge-percent {
-    font-size: 56px;
-    font-weight: 900;
-    color: var(--green);
-    line-height: 1;
-    margin: 8px 0 4px;
-  }
-  .charge-status {
-    font-size: 14px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 12px;
-  }
-  .time-pill {
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.35);
-    border-radius: 99px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--white);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 8px;
-  }
-
-  .invite-card {
-    background: var(--white);
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    display: flex;
-  }
-  .invite-accent {
-    width: 5px;
-    background: var(--green);
-    flex-shrink: 0;
-  }
-  .invite-body {
-    flex: 1;
-    padding: 14px;
-  }
-  .invite-game-name {
-    font-size: 16px;
-    font-weight: 800;
-    margin-bottom: 8px;
-  }
-  .invite-stats {
-    display: flex;
-    gap: 16px;
-  }
-  .invite-stat {
-    display: flex;
-    flex-direction: column;
-  }
-  .invite-stat-label {
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-  }
-  .invite-stat-val {
-    font-size: 14px;
-    font-weight: 800;
-  }
-
-  .info-card {
-    background: var(--white);
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    padding: 16px;
-  }
-  .info-title {
-    font-size: 15px;
-    font-weight: 800;
-    margin-bottom: 12px;
-  }
-  .info-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .info-item {
-    display: flex;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-  }
-  .info-highlight {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--blue);
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-  }
-
-  /* ───────── NOTIFICATION TOAST ───────── */
-  .toast {
-    position: fixed;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-80px);
-    background: var(--dark-blue);
-    color: var(--white);
-    padding: 10px 20px;
-    border-radius: 99px;
-    font-size: 13px;
-    font-weight: 700;
-    z-index: 999;
-    transition: transform 0.3s ease;
-    pointer-events: none;
-    white-space: nowrap;
-    max-width: 90%;
-  }
-  .toast.show {
-    transform: translateX(-50%) translateY(0);
-  }
+/* Countdown */
+.countdown { position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; z-index:15; pointer-events:none; }
+.cnum { font-size:120px; font-weight:900; color:#fff; text-shadow:0 0 40px rgba(0,70,86,.8);
+  font-family:'Nunito',sans-serif; opacity:0; transition:opacity .15s; }
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ══════════════════════════════════
-       SCREEN 1 — HOME
-  ══════════════════════════════════ -->
-  <div id="screen-home" class="screen active">
-    <div class="grad-header">
-      <div class="header-top">
-        <div class="wordmark">moeve</div>
-        <div class="avatar">N</div>
-      </div>
-      <div class="greeting">¡Bienvenida de vuelta!</div>
-      <div class="greeting-name">¡Hola, Nerea!</div>
-      <div class="greeting-sub">Positive Motion Race</div>
+<!-- ═══════════════════════════════════════
+     SCREEN 1 — HOME
+═══════════════════════════════════════ -->
+<div id="screen-home" class="screen active">
+  <div class="grad-hd" style="padding-bottom:8px;">
+    <div class="hd-row">
+      <div class="logo">moeve</div>
+      <div class="avatar">N</div>
     </div>
-
-    <div class="screen-body">
-      <!-- Points counter -->
-      <div class="card points-display">
-        <div class="card-label">Puntos acumulados</div>
-        <div class="points-number" id="home-points">0</div>
-        <div class="points-label">puntos totales</div>
-      </div>
-
-      <!-- Energy card -->
-      <div class="card">
-        <div class="energy-row">
-          <div class="energy-title">Energía</div>
-          <div class="energy-badge" id="home-energy-badge">62% · Nivel 4</div>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="home-energy-bar" style="width:62%"></div>
-        </div>
-        <div class="chips-row" id="home-chips">
-          <!-- filled by JS -->
-        </div>
-      </div>
-
-      <!-- CTA buttons -->
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="startGame()">JUGAR AHORA</button>
-        <button class="btn btn-outline" onclick="showScreen('planta')" style="flex:0 0 auto;padding:14px 18px;">MI PLANTA</button>
-      </div>
-
-      <!-- Promo card -->
-      <div class="promo-card">
-        <div class="promo-label">Advergame</div>
-        <div class="promo-title">Positive Motion Race</div>
-        <div class="promo-sub">Juega en el surtidor mientras cargas.</div>
-      </div>
-
-      <!-- Best lap -->
-      <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <div class="card-label">Mejor vuelta</div>
-          <div style="font-size:20px;font-weight:900;" id="home-best-lap">--:--</div>
-        </div>
-        <div style="text-align:right;">
-          <div class="card-label">Ranking</div>
-          <div style="font-size:20px;font-weight:900;">#147</div>
-        </div>
-        <div style="text-align:right;">
-          <div class="card-label">Fuentes</div>
-          <div style="font-size:20px;font-weight:900;" id="home-sources-count">0</div>
-        </div>
-      </div>
-
-      <!-- Charging CTA -->
-      <div class="card" style="display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showScreen('charging')">
-        <div style="font-size:28px;">⚡</div>
-        <div>
-          <div style="font-size:14px;font-weight:800;">Cargando en Estación Norte</div>
-          <div style="font-size:12px;font-weight:600;color:var(--text-muted);">72% · 12 min restantes</div>
-        </div>
-        <div style="margin-left:auto;font-size:18px;color:var(--text-muted);">›</div>
-      </div>
-    </div>
-
-    <!-- Bottom Nav -->
-    <nav class="bottom-nav">
-      <div class="nav-pill">
-        <div class="nav-item active" onclick="showScreen('home')">
-          <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          <span>Inicio</span>
-        </div>
-        <div class="nav-item" onclick="showScreen('charging')">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          <span>Mapa</span>
-        </div>
-        <div class="nav-item" onclick="startGame()">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          <span>Gow</span>
-        </div>
-        <div class="nav-item">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          <span>Perfil</span>
-        </div>
-      </div>
-      <button class="nav-pay">Pagar<br>+</button>
-    </nav>
+    <div class="hi">¡Bienvenida de vuelta!</div>
+    <div class="hi-name">¡Hola, Nerea!</div>
+    <div class="hi-sub">Positive Motion Race</div>
   </div>
 
-
-  <!-- ══════════════════════════════════
-       SCREEN 2 — GAME
-  ══════════════════════════════════ -->
-  <div id="screen-game" class="screen">
-    <canvas id="gameCanvas"></canvas>
-
-    <!-- HUD Top -->
-    <div class="game-hud-top">
-      <div class="hud-stat">
-        <div class="hud-stat-label">Posición</div>
-        <div class="hud-stat-value" id="hud-pos">2°</div>
-      </div>
-      <div class="hud-stat">
-        <div class="hud-stat-label">Vuelta</div>
-        <div class="hud-stat-value small" id="hud-lap">1 / 3</div>
-      </div>
-      <div class="hud-stat">
-        <div class="hud-stat-label">Tiempo</div>
-        <div class="hud-stat-value small" id="hud-time">0:00.00</div>
-      </div>
-      <div class="hud-stat">
-        <div class="hud-stat-label">Puntos</div>
-        <div class="hud-stat-value small" id="hud-score">0</div>
-      </div>
+  <div class="body">
+    <div class="card" style="text-align:center;padding:18px 14px 14px;">
+      <div class="clabel">Puntos acumulados</div>
+      <div class="pts-num" id="h-pts">0</div>
+      <div class="pts-sub">puntos totales</div>
     </div>
 
-    <!-- HUD Bottom -->
-    <div class="game-hud-bottom">
-      <div class="energy-hud-row">
-        <div class="energy-hud-label">ENERGÍA</div>
-        <div class="progress-track" style="flex:1;">
-          <div class="progress-fill mint" id="game-energy-bar" style="width:100%"></div>
-        </div>
-        <div style="font-size:12px;font-weight:700;color:var(--text-muted);min-width:32px;text-align:right;" id="game-energy-pct">100%</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
+        <div style="font-size:15px;font-weight:700;">Energía</div>
+        <div class="ebadge" id="h-ebadge">62% · Nivel 4</div>
       </div>
-      <div class="control-row">
-        <div class="ctrl-btn" id="btn-left" ontouchstart="pressKey('left',true)" ontouchend="pressKey('left',false)" onmousedown="pressKey('left',true)" onmouseup="pressKey('left',false)">◁</div>
-        <button class="boost-btn" id="boost-btn"
-          ontouchstart="pressBoost(true)" ontouchend="pressBoost(false)"
-          onmousedown="pressBoost(true)" onmouseup="pressBoost(false)">
-          ⚡ BOOST
-        </button>
-        <div class="ctrl-btn" id="btn-right" ontouchstart="pressKey('right',true)" ontouchend="pressKey('right',false)" onmousedown="pressKey('right',true)" onmouseup="pressKey('right',false)">▷</div>
-      </div>
+      <div class="ptrack"><div class="pfill" id="h-ebar" style="width:62%"></div></div>
+      <div class="chips" id="h-chips"></div>
     </div>
 
-    <!-- Game Over overlay (hidden) -->
-    <div class="game-over-overlay" id="game-over" style="display:none;">
-      <h2>¡Carrera<br>terminada!</h2>
-      <div class="score-line" id="go-score-line">Orbes recogidos: 0</div>
-      <div class="game-over-card">
-        <div class="game-over-pts-label">Puntos ganados</div>
-        <div class="game-over-pts" id="go-pts">+0</div>
-        <div class="game-over-pts-label" style="margin-top:4px;" id="go-best">Mejor vuelta: --:--</div>
-      </div>
-      <button class="btn btn-green" style="width:100%;" onclick="startGame()">JUGAR DE NUEVO</button>
-      <button class="btn btn-outline" style="width:100%;background:rgba(255,255,255,0.1);color:white;" onclick="showScreen('home')">VOLVER AL INICIO</button>
-    </div>
-  </div>
-
-
-  <!-- ══════════════════════════════════
-       SCREEN 3 — MI PLANTA
-  ══════════════════════════════════ -->
-  <div id="screen-planta" class="screen">
-    <div class="grad-header compact">
-      <div class="header-top">
-        <div class="back-row">
-          <button class="back-btn" onclick="showScreen('home')">‹</button>
-          <div class="screen-title">Mi planta energética</div>
-        </div>
-        <div class="wordmark">moeve</div>
-      </div>
+    <div class="btn-row">
+      <button class="btn blue" onclick="startGame()">JUGAR AHORA</button>
+      <button class="btn out" onclick="showScreen('planta')" style="flex:0 0 auto;padding:14px 16px;">MI PLANTA</button>
     </div>
 
-    <div class="screen-body">
-      <!-- Points progress card -->
-      <div class="card">
-        <div class="card-label">Puntos acumulados</div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
-          <div style="font-size:24px;font-weight:900;color:#1bc78a;" id="planta-points">0 pts</div>
-          <div style="font-size:12px;font-weight:700;color:var(--text-muted);" id="planta-next-level">Próx. nivel: 1000 pts</div>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="planta-pts-bar" style="width:0%"></div>
-        </div>
-        <div style="margin-top:8px;font-size:12px;font-weight:700;color:var(--text-muted);">
-          Regen. energía: <span id="planta-regen" style="color:var(--blue);">+1.0x base</span>
-        </div>
-      </div>
+    <div class="promo">
+      <div class="promo-tag">Advergame</div>
+      <div class="promo-t">Positive Motion Race</div>
+      <div class="promo-s">Juega en el surtidor mientras cargas.</div>
+    </div>
 
-      <!-- Energy sources -->
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+      <div><div class="clabel">Mejor vuelta</div>
+        <div style="font-size:20px;font-weight:900;" id="h-best">--:--</div></div>
+      <div style="text-align:center;"><div class="clabel">Ranking</div>
+        <div style="font-size:20px;font-weight:900;">#147</div></div>
+      <div style="text-align:right;"><div class="clabel">Fuentes</div>
+        <div style="font-size:20px;font-weight:900;" id="h-srcs">×0</div></div>
+    </div>
+
+    <div class="card" style="display:flex;align-items:center;gap:11px;cursor:pointer;"
+         onclick="showScreen('charging')">
+      <div style="font-size:26px;">⚡</div>
       <div>
-        <div class="card-label" style="padding:0 4px 8px;">Fuentes de energía</div>
-
-        <!-- Solar -->
-        <div class="source-card" style="margin-bottom:10px;" id="src-solar">
-          <div class="source-accent" style="background:#90FFBB;"></div>
-          <div class="source-icon">☀️</div>
-          <div class="source-info">
-            <div class="source-name">Solar</div>
-            <div class="source-sub">Panel fotovoltaico · <span id="solar-count">×0</span></div>
-            <div class="source-bonus" id="solar-bonus">+0% regen</div>
-          </div>
-          <button class="btn-pts" id="btn-solar" onclick="buySource('solar')">+500 pts</button>
-        </div>
-
-        <!-- Eólica -->
-        <div class="source-card" style="margin-bottom:10px;" id="src-wind">
-          <div class="source-accent" style="background:#047DBA;"></div>
-          <div class="source-icon">💨</div>
-          <div class="source-info">
-            <div class="source-name">Eólica</div>
-            <div class="source-sub">Aerogenerador · <span id="wind-count">×0</span></div>
-            <div class="source-bonus" id="wind-bonus">+0% regen</div>
-          </div>
-          <button class="btn-pts" id="btn-wind" onclick="buySource('wind')">+800 pts</button>
-        </div>
-
-        <!-- Hidrógeno -->
-        <div class="source-card" style="margin-bottom:10px;" id="src-hydrogen">
-          <div class="source-accent" style="background:#F3BDFF;"></div>
-          <div class="source-icon">⚗️</div>
-          <div class="source-info">
-            <div class="source-name">Hidrógeno verde</div>
-            <div class="source-sub">Electrolizador · <span id="hydrogen-count">bloqueado</span></div>
-            <div class="source-bonus" id="hydrogen-bonus">Requiere 2000 pts</div>
-          </div>
-          <button class="btn-pts disabled" id="btn-hydrogen" onclick="buySource('hydrogen')">+1500 pts</button>
-        </div>
-
-        <!-- Bio -->
-        <div class="source-card" style="margin-bottom:10px;" id="src-bio">
-          <div class="source-accent" style="background:#E0FF48;"></div>
-          <div class="source-icon">🌿</div>
-          <div class="source-info">
-            <div class="source-name">Biocombustible</div>
-            <div class="source-sub">Refinería bio · <span id="bio-count">×0</span></div>
-            <div class="source-bonus" id="bio-bonus">+0% regen</div>
-          </div>
-          <button class="btn-pts" id="btn-bio" onclick="buySource('bio')">+950 pts</button>
-        </div>
+        <div style="font-size:14px;font-weight:800;">Cargando en Estación Norte</div>
+        <div style="font-size:12px;font-weight:600;color:var(--muted);">72% · 12 min restantes</div>
       </div>
-
-      <!-- How regen works -->
-      <div class="info-card">
-        <div class="info-title">¿Cómo funciona?</div>
-        <div class="info-list">
-          <div class="info-item"><span>⚡</span><span>Cada fuente comprada añade +5% de regeneración de energía por frame.</span></div>
-          <div class="info-item"><span>🚗</span><span>Más energía = mayor velocidad máxima y boost más duradero.</span></div>
-          <div class="info-item"><span>🏆</span><span>Recoge orbes verdes en la carrera para ganar puntos y energía.</span></div>
-        </div>
-        <div class="info-highlight">Más fuentes = más velocidad</div>
-      </div>
+      <div style="margin-left:auto;font-size:18px;color:var(--muted);">›</div>
     </div>
-
-    <nav class="bottom-nav">
-      <div class="nav-pill">
-        <div class="nav-item" onclick="showScreen('home')">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          <span>Inicio</span>
-        </div>
-        <div class="nav-item" onclick="showScreen('charging')">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          <span>Mapa</span>
-        </div>
-        <div class="nav-item active">
-          <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c8 0 11-7 11-7s-1 4-6 6l.03.01C14.69 19.59 16 17.27 16 14c0-5-4-8-4-8z"/></svg>
-          <span>Planta</span>
-        </div>
-        <div class="nav-item">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          <span>Perfil</span>
-        </div>
-      </div>
-      <button class="nav-pay">Pagar<br>+</button>
-    </nav>
   </div>
 
-
-  <!-- ══════════════════════════════════
-       SCREEN 4 — CHARGING WAIT
-  ══════════════════════════════════ -->
-  <div id="screen-charging" class="screen">
-    <div class="grad-header">
-      <div class="header-top">
-        <div class="back-row">
-          <button class="back-btn" onclick="showScreen('home')">‹</button>
-          <div class="screen-title">Estación Norte</div>
-        </div>
-        <div class="wordmark">moeve</div>
-      </div>
-      <div class="charge-percent">72%</div>
-      <div class="charge-status">Carga en curso</div>
-      <div class="progress-track" style="margin-bottom:8px;">
-        <div class="progress-fill mint" style="width:72%;"></div>
-      </div>
-      <div class="time-pill">⏱ 12 min restantes</div>
+  <nav class="nav">
+    <div class="npill">
+      <div class="ni on" onclick="showScreen('home')">
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Inicio</span></div>
+      <div class="ni" onclick="showScreen('charging')">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <span>Mapa</span></div>
+      <div class="ni" onclick="startGame()">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <span>Gow</span></div>
+      <div class="ni">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Perfil</span></div>
     </div>
+    <button class="npay">Pagar<br>+</button>
+  </nav>
+</div>
 
-    <div class="screen-body">
-      <div class="card">
-        <div style="font-size:20px;font-weight:900;margin-bottom:4px;">Mientras cargas, juega.</div>
-        <div style="font-size:13px;font-weight:600;color:var(--text-muted);">12 min = 3 vueltas · Valle del Hidrógeno</div>
+
+<!-- ═══════════════════════════════════════
+     SCREEN 2 — GAME
+═══════════════════════════════════════ -->
+<div id="screen-game" class="screen">
+  <canvas id="gc"></canvas>
+
+  <div class="ghud-t" id="ghud-t">
+    <div class="hs"><div class="hs-l">Posición</div><div class="hs-v" id="g-pos">2°</div></div>
+    <div class="hs"><div class="hs-l">Vuelta</div><div class="hs-v sm" id="g-lap">1/3</div></div>
+    <div class="hs"><div class="hs-l">Tiempo</div><div class="hs-v sm" id="g-time">0:00</div></div>
+    <div class="hs"><div class="hs-l">Puntos</div><div class="hs-v sm" id="g-score">0</div></div>
+  </div>
+
+  <div class="ghud-b" id="ghud-b">
+    <div class="e-row">
+      <div class="e-lbl">Energía</div>
+      <div class="ptrack" style="flex:1;">
+        <div class="pfill mint" id="g-ebar" style="width:100%"></div>
       </div>
-
-      <!-- Game invite card -->
-      <div class="invite-card">
-        <div class="invite-accent"></div>
-        <div class="invite-body">
-          <div style="background:var(--yellow);color:var(--dark-blue);font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 8px;border-radius:99px;display:inline-block;margin-bottom:8px;text-transform:uppercase;">En vivo</div>
-          <div class="invite-game-name">Positive Motion Race</div>
-          <div class="invite-stats">
-            <div class="invite-stat">
-              <div class="invite-stat-label">Récord</div>
-              <div class="invite-stat-val" id="charging-best">2:38</div>
-            </div>
-            <div class="invite-stat">
-              <div class="invite-stat-label">Ranking</div>
-              <div class="invite-stat-val">#147</div>
-            </div>
-            <div class="invite-stat">
-              <div class="invite-stat-label">Energía</div>
-              <div class="invite-stat-val" id="charging-sources">×0</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn btn-green" style="font-size:17px;padding:18px;" onclick="startGame()">Jugar ahora →</button>
-
-      <!-- Info card -->
-      <div class="info-card">
-        <div class="info-title">¿Cómo funciona?</div>
-        <div class="info-list">
-          <div class="info-item"><span>🎮</span><span>Juega mientras tu coche eléctrico carga en el surtidor.</span></div>
-          <div class="info-item"><span>⚡</span><span>Recoge orbes de energía verde y gana puntos reales moeve.</span></div>
-          <div class="info-item"><span>🌱</span><span>Invierte puntos en fuentes renovables para ser más rápido.</span></div>
-        </div>
-        <div class="info-highlight">Más fuentes = más velocidad</div>
-      </div>
+      <div style="font-size:11px;font-weight:800;color:var(--muted);min-width:30px;text-align:right;" id="g-epct">100%</div>
     </div>
+    <div class="ctrl">
+      <div class="cbtn" id="b-L"
+        ontouchstart="laneShift(-1)" onmousedown="laneShift(-1)">◁</div>
+      <button class="bbtn" id="b-B"
+        ontouchstart="boostPress(true)" ontouchend="boostPress(false)"
+        onmousedown="boostPress(true)" onmouseup="boostPress(false)">⚡ BOOST</button>
+      <div class="cbtn" id="b-R"
+        ontouchstart="laneShift(1)" onmousedown="laneShift(1)">▷</div>
+    </div>
+  </div>
 
-    <nav class="bottom-nav">
-      <div class="nav-pill">
-        <div class="nav-item" onclick="showScreen('home')">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          <span>Inicio</span>
-        </div>
-        <div class="nav-item active">
-          <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          <span>Mapa</span>
-        </div>
-        <div class="nav-item" onclick="startGame()">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          <span>Gow</span>
-        </div>
-        <div class="nav-item">
-          <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          <span>Perfil</span>
-        </div>
-      </div>
-      <button class="nav-pay">Pagar<br>+</button>
-    </nav>
+  <div class="gover" id="gover" style="display:none;">
+    <h2>¡Carrera<br>terminada!</h2>
+    <div class="gsl" id="go-sl">—</div>
+    <div class="gcard">
+      <div class="gptsl">Puntos ganados</div>
+      <div class="gpts" id="go-pts">+0</div>
+      <div class="gptsl" style="margin-top:3px;" id="go-best"></div>
+    </div>
+    <button class="btn grn" onclick="startGame()">JUGAR DE NUEVO</button>
+    <button class="btn out" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3);"
+      onclick="showScreen('home')">VOLVER AL INICIO</button>
+  </div>
+
+  <div class="countdown" id="countdown">
+    <div class="cnum" id="cnum">3</div>
   </div>
 </div>
 
-<!-- Toast notification -->
+
+<!-- ═══════════════════════════════════════
+     SCREEN 3 — PLANTA
+═══════════════════════════════════════ -->
+<div id="screen-planta" class="screen">
+  <div class="grad-hd sm">
+    <div class="hd-row">
+      <div class="back-row">
+        <button class="back-btn" onclick="showScreen('home')">‹</button>
+        <div class="stitle">Mi planta energética</div>
+      </div>
+      <div class="logo">moeve</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="card">
+      <div class="clabel">Puntos acumulados</div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;">
+        <div style="font-size:24px;font-weight:900;color:#1bc78a;" id="p-pts">0 pts</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);" id="p-nxt">Próx. nivel: 1000 pts</div>
+      </div>
+      <div class="ptrack"><div class="pfill" id="p-pbar" style="width:0%"></div></div>
+      <div style="margin-top:7px;font-size:12px;font-weight:700;color:var(--muted);">
+        Regen. energía: <span id="p-regen" style="color:var(--blue);">+1.00x</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="clabel" style="padding:0 3px 7px;">Fuentes de energía</div>
+      <div class="src-card" id="sc-solar">
+        <div class="src-bar" style="background:#90FFBB;"></div>
+        <div class="src-ico">☀️</div>
+        <div class="src-info">
+          <div class="src-name">Solar</div>
+          <div class="src-sub">Panel fotovoltaico · <span id="sc-solar-n">×0</span></div>
+          <div class="src-bon" id="sc-solar-b">+0% regen</div>
+        </div>
+        <button class="bpts" id="btn-solar" onclick="buySrc('solar')">+500 pts</button>
+      </div>
+      <div class="src-card" id="sc-wind">
+        <div class="src-bar" style="background:#047DBA;"></div>
+        <div class="src-ico">💨</div>
+        <div class="src-info">
+          <div class="src-name">Eólica</div>
+          <div class="src-sub">Aerogenerador · <span id="sc-wind-n">×0</span></div>
+          <div class="src-bon" id="sc-wind-b">+0% regen</div>
+        </div>
+        <button class="bpts" id="btn-wind" onclick="buySrc('wind')">+800 pts</button>
+      </div>
+      <div class="src-card" id="sc-hydrogen">
+        <div class="src-bar" style="background:#F3BDFF;"></div>
+        <div class="src-ico">⚗️</div>
+        <div class="src-info">
+          <div class="src-name">Hidrógeno verde</div>
+          <div class="src-sub">Electrolizador · <span id="sc-hydrogen-n">bloqueado</span></div>
+          <div class="src-bon" id="sc-hydrogen-b" style="color:var(--muted);">Requiere 2.000 pts</div>
+        </div>
+        <button class="bpts off" id="btn-hydrogen" onclick="buySrc('hydrogen')">+1500 pts</button>
+      </div>
+      <div class="src-card" id="sc-bio">
+        <div class="src-bar" style="background:#E0FF48;"></div>
+        <div class="src-ico">🌿</div>
+        <div class="src-info">
+          <div class="src-name">Biocombustible</div>
+          <div class="src-sub">Refinería bio · <span id="sc-bio-n">×0</span></div>
+          <div class="src-bon" id="sc-bio-b">+0% regen</div>
+        </div>
+        <button class="bpts" id="btn-bio" onclick="buySrc('bio')">+950 pts</button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-t">¿Cómo funciona?</div>
+      <div class="info-list">
+        <div class="info-i"><span>⚡</span><span>Cada fuente añade +5% de regeneración de energía.</span></div>
+        <div class="info-i"><span>🚗</span><span>Más energía = mayor velocidad y boost más duradero.</span></div>
+        <div class="info-i"><span>🏆</span><span>Recoge orbes verdes en carrera para ganar puntos.</span></div>
+      </div>
+      <div class="info-hl">Más fuentes = más velocidad</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="npill">
+      <div class="ni" onclick="showScreen('home')">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Inicio</span></div>
+      <div class="ni" onclick="showScreen('charging')">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <span>Mapa</span></div>
+      <div class="ni on">
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c8 0 11-7 11-7s-1 4-6 6l.03.01C14.69 19.59 16 17.27 16 14c0-5-4-8-4-8z"/></svg>
+        <span>Planta</span></div>
+      <div class="ni">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Perfil</span></div>
+    </div>
+    <button class="npay">Pagar<br>+</button>
+  </nav>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     SCREEN 4 — CHARGING
+═══════════════════════════════════════ -->
+<div id="screen-charging" class="screen">
+  <div class="grad-hd">
+    <div class="hd-row">
+      <div class="back-row">
+        <button class="back-btn" onclick="showScreen('home')">‹</button>
+        <div class="stitle">Estación Norte</div>
+      </div>
+      <div class="logo">moeve</div>
+    </div>
+    <div class="chpct">72%</div>
+    <div class="chst">Carga en curso</div>
+    <div class="ptrack" style="margin-bottom:7px;">
+      <div class="pfill mint" style="width:72%;"></div></div>
+    <div class="tpill">⏱ 12 min restantes</div>
+  </div>
+
+  <div class="body">
+    <div class="card">
+      <div style="font-size:19px;font-weight:900;margin-bottom:3px;">Mientras cargas, juega.</div>
+      <div style="font-size:13px;font-weight:600;color:var(--muted);">12 min = 3 vueltas · Valle del Hidrógeno</div>
+    </div>
+    <div class="inv-card">
+      <div class="inv-acc"></div>
+      <div class="inv-body">
+        <div style="background:var(--yellow);color:var(--dark-blue);font-size:9px;font-weight:800;
+          letter-spacing:1px;padding:2px 7px;border-radius:99px;display:inline-block;
+          margin-bottom:7px;text-transform:uppercase;">En vivo</div>
+        <div class="inv-name">Positive Motion Race</div>
+        <div class="inv-stats">
+          <div><div class="inv-sl">Récord</div><div class="inv-sv" id="ch-best">2:38</div></div>
+          <div><div class="inv-sl">Ranking</div><div class="inv-sv">#147</div></div>
+          <div><div class="inv-sl">Energía</div><div class="inv-sv" id="ch-srcs">×0</div></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn grn" style="font-size:17px;padding:17px;" onclick="startGame()">Jugar ahora →</button>
+    <div class="info-card">
+      <div class="info-t">¿Cómo funciona?</div>
+      <div class="info-list">
+        <div class="info-i"><span>🎮</span><span>Juega mientras tu coche eléctrico carga.</span></div>
+        <div class="info-i"><span>⚡</span><span>Recoge orbes de energía verde y gana puntos moeve.</span></div>
+        <div class="info-i"><span>🌱</span><span>Invierte en fuentes renovables para ir más rápido.</span></div>
+      </div>
+      <div class="info-hl">Más fuentes = más velocidad</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="npill">
+      <div class="ni" onclick="showScreen('home')">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Inicio</span></div>
+      <div class="ni on">
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <span>Mapa</span></div>
+      <div class="ni" onclick="startGame()">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <span>Gow</span></div>
+      <div class="ni">
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Perfil</span></div>
+    </div>
+    <button class="npay">Pagar<br>+</button>
+  </nav>
+</div>
+
+</div><!-- #app -->
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   STATE & PERSISTENCE
-═══════════════════════════════════════════════════ */
-const SOURCES_CONFIG = {
-  solar:    { name: 'Solar',            cost: 500,  regenBonus: 0.05 },
-  wind:     { name: 'Eólica',           cost: 800,  regenBonus: 0.05 },
-  hydrogen: { name: 'Hidrógeno verde',  cost: 1500, regenBonus: 0.05, minPts: 2000 },
-  bio:      { name: 'Biocombustible',   cost: 950,  regenBonus: 0.05 },
+/* ═══════════════════════════════════════════════
+   ESTADO
+═══════════════════════════════════════════════ */
+const SRC_CFG = {
+  solar:    { name:'Solar',           cost:500,  bonus:.05 },
+  wind:     { name:'Eólica',          cost:800,  bonus:.05 },
+  hydrogen: { name:'Hidrógeno verde', cost:1500, bonus:.05, minPts:2000 },
+  bio:      { name:'Biocombustible',  cost:950,  bonus:.05 },
 };
 
-function loadState() {
+function loadSt() {
   try {
-    const s = JSON.parse(localStorage.getItem('moeve_state') || '{}');
+    const s = JSON.parse(localStorage.getItem('moeve2') || '{}');
     return {
-      points:   s.points   ?? 4280,
-      sources:  s.sources  ?? { solar: 3, wind: 1, hydrogen: 0, bio: 2 },
-      bestLap:  s.bestLap  ?? null,
-      energy:   s.energy   ?? 62,
+      pts:    s.pts    ?? 4280,
+      srcs:   s.srcs   ?? { solar:3, wind:1, hydrogen:0, bio:2 },
+      best:   s.best   ?? null,
+      energy: s.energy ?? 62,
     };
-  } catch(e) { return { points: 4280, sources: { solar:3, wind:1, hydrogen:0, bio:2 }, bestLap: null, energy: 62 }; }
+  } catch { return { pts:4280, srcs:{solar:3,wind:1,hydrogen:0,bio:2}, best:null, energy:62 }; }
 }
+function saveSt() { localStorage.setItem('moeve2', JSON.stringify(st)); }
 
-function saveState() {
-  localStorage.setItem('moeve_state', JSON.stringify(state));
-}
+let st = loadSt();
+const totalSrcs = () => Object.values(st.srcs).reduce((a,b)=>a+b,0);
+const regenRate = () => 1 + totalSrcs() * 0.05;
 
-let state = loadState();
-
-function totalSources() {
-  return Object.values(state.sources).reduce((a,b) => a+b, 0);
-}
-function energyRegenRate() {
-  return 1 + totalSources() * 0.05;
-}
-
-/* ═══════════════════════════════════════════════════
-   SCREEN ROUTING
-═══════════════════════════════════════════════════ */
-let currentScreen = 'home';
-
+/* ═══════════════════════════════════════════════
+   ROUTING
+═══════════════════════════════════════════════ */
+let curScreen = 'home';
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-  currentScreen = id;
-  if (id === 'home')     updateHomeUI();
-  if (id === 'planta')   updatePlantaUI();
-  if (id === 'charging') updateChargingUI();
-  if (id !== 'game' && gameState.running) {
-    gameState.running = false;
-    cancelAnimationFrame(gameState.raf);
-  }
+  document.getElementById('screen-'+id).classList.add('active');
+  curScreen = id;
+  if (id === 'home')     uiHome();
+  if (id === 'planta')   uiPlanta();
+  if (id === 'charging') uiCharging();
+  if (id !== 'game' && G.running) stopGame();
 }
 
-/* ═══════════════════════════════════════════════════
-   UI UPDATES
-═══════════════════════════════════════════════════ */
-function fmtPts(n) {
-  return n.toLocaleString('es-ES');
+/* ═══════════════════════════════════════════════
+   UI HELPERS
+═══════════════════════════════════════════════ */
+const fmt = n => Math.round(n).toLocaleString('es-ES');
+function fmtT(ms) {
+  const m = Math.floor(ms/60000);
+  const s = Math.floor((ms%60000)/1000);
+  return `${m}:${String(s).padStart(2,'0')}`;
 }
 
-function updateHomeUI() {
-  document.getElementById('home-points').textContent = fmtPts(state.points);
-  const e = Math.round(state.energy);
-  const lvl = Math.floor(e / 25) + 1;
-  document.getElementById('home-energy-badge').textContent = `${e}% · Nivel ${lvl}`;
-  document.getElementById('home-energy-bar').style.width = e + '%';
-  document.getElementById('home-best-lap').textContent = state.bestLap ? fmtTime(state.bestLap) : '--:--';
-  document.getElementById('home-sources-count').textContent = '×' + totalSources();
-
-  const chips = document.getElementById('home-chips');
+function uiHome() {
+  document.getElementById('h-pts').textContent = fmt(st.pts);
+  const e = Math.round(st.energy);
+  const lv = Math.floor(e/25)+1;
+  document.getElementById('h-ebadge').textContent = `${e}% · Nivel ${lv}`;
+  document.getElementById('h-ebar').style.width = e+'%';
+  document.getElementById('h-best').textContent = st.best ? fmtT(st.best) : '--:--';
+  document.getElementById('h-srcs').textContent = '×'+totalSrcs();
+  const chips = document.getElementById('h-chips');
   chips.innerHTML = '';
-  const colors = { solar:'#90FFBB', wind:'#047DBA', hydrogen:'#F3BDFF', bio:'#E0FF48' };
-  const labels = { solar:'Solar', wind:'Eólica', hydrogen:'H₂ verde', bio:'Bio' };
-  Object.entries(state.sources).forEach(([k,v]) => {
-    if (v > 0) {
-      const chip = document.createElement('div');
-      chip.className = 'chip';
-      chip.innerHTML = `<div class="chip-dot" style="background:${colors[k]};"></div>${labels[k]} ×${v}`;
-      chips.appendChild(chip);
-    }
+  const cc = {solar:'#90FFBB',wind:'#047DBA',hydrogen:'#F3BDFF',bio:'#E0FF48'};
+  const cl = {solar:'Solar',wind:'Eólica',hydrogen:'H₂ verde',bio:'Bio'};
+  Object.entries(st.srcs).forEach(([k,v]) => {
+    if (!v) return;
+    chips.insertAdjacentHTML('beforeend',
+      `<div class="chip"><div class="dot" style="background:${cc[k]};"></div>${cl[k]} ×${v}</div>`);
   });
 }
 
-function updatePlantaUI() {
-  document.getElementById('planta-points').textContent = fmtPts(state.points) + ' pts';
+function uiPlanta() {
+  document.getElementById('p-pts').textContent = fmt(st.pts)+' pts';
+  const lvls=[0,500,1000,2000,3500,5000,8000,12000];
+  let li=0;
+  lvls.forEach((v,i)=>{ if(st.pts>=v) li=i; });
+  const next=lvls[li+1]??lvls[lvls.length-1]*2, prev=lvls[li];
+  document.getElementById('p-pbar').style.width=Math.min(100,((st.pts-prev)/(next-prev))*100)+'%';
+  document.getElementById('p-nxt').textContent=`Próx. nivel: ${fmt(next)} pts`;
+  document.getElementById('p-regen').textContent=`+${regenRate().toFixed(2)}x`;
 
-  const levels = [0, 500, 1000, 2000, 3500, 5000, 8000, 12000];
-  let lvlIdx = 0;
-  for (let i = 0; i < levels.length; i++) {
-    if (state.points >= levels[i]) lvlIdx = i;
-  }
-  const nextLvl = levels[lvlIdx + 1] ?? levels[levels.length - 1] * 2;
-  const prevLvl = levels[lvlIdx];
-  const pct = Math.min(100, ((state.points - prevLvl) / (nextLvl - prevLvl)) * 100);
-  document.getElementById('planta-pts-bar').style.width = pct + '%';
-  document.getElementById('planta-next-level').textContent = `Próx. nivel: ${fmtPts(nextLvl)} pts`;
-
-  const regen = energyRegenRate();
-  document.getElementById('planta-regen').textContent = `+${regen.toFixed(2)}x base`;
-
-  const counts = { solar:'solar-count', wind:'wind-count', hydrogen:'hydrogen-count', bio:'bio-count' };
-  const bonuses = { solar:'solar-bonus', wind:'wind-bonus', hydrogen:'hydrogen-bonus', bio:'bio-bonus' };
-  const buttons = { solar:'btn-solar', wind:'btn-wind', hydrogen:'btn-hydrogen', bio:'btn-bio' };
-
-  Object.keys(SOURCES_CONFIG).forEach(key => {
-    const cfg = SOURCES_CONFIG[key];
-    const count = state.sources[key];
-    const locked = cfg.minPts && state.points < cfg.minPts;
-
-    const countEl = document.getElementById(counts[key]);
-    if (key === 'hydrogen') {
-      countEl.textContent = locked ? 'bloqueado' : (count > 0 ? `×${count} activos` : '×0');
-    } else {
-      countEl.textContent = count > 0 ? `×${count} activos` : '×0';
-    }
-
-    const bonusEl = document.getElementById(bonuses[key]);
-    if (locked) {
-      bonusEl.textContent = `Requiere ${fmtPts(cfg.minPts)} pts`;
-      bonusEl.style.color = 'var(--text-muted)';
-    } else {
-      bonusEl.textContent = `+${(count * cfg.regenBonus * 100).toFixed(0)}% regen activa`;
-      bonusEl.style.color = '#1bc78a';
-    }
-
-    const btn = document.getElementById(buttons[key]);
-    if (locked) {
-      btn.classList.add('disabled');
-      btn.textContent = 'Bloqueado';
-    } else if (state.points < cfg.cost) {
-      btn.classList.add('disabled');
-      btn.textContent = `+${fmtPts(cfg.cost)} pts`;
-    } else {
-      btn.classList.remove('disabled');
-      btn.textContent = `+${fmtPts(cfg.cost)} pts`;
-    }
+  Object.keys(SRC_CFG).forEach(k=>{
+    const cfg=SRC_CFG[k], cnt=st.srcs[k], locked=cfg.minPts&&st.pts<cfg.minPts;
+    document.getElementById(`sc-${k}-n`).textContent=
+      k==='hydrogen'&&locked ? 'bloqueado' : (cnt>0?`×${cnt} activos`:'×0');
+    const bon=document.getElementById(`sc-${k}-b`);
+    if(locked){ bon.textContent=`Requiere ${fmt(cfg.minPts)} pts`; bon.style.color='var(--muted)'; }
+    else { bon.textContent=`+${(cnt*cfg.bonus*100).toFixed(0)}% regen activa`; bon.style.color='#1bc78a'; }
+    const btn=document.getElementById(`btn-${k}`);
+    btn.className='bpts'+(locked||st.pts<cfg.cost?' off':'');
+    btn.textContent=locked?'Bloqueado':`+${fmt(cfg.cost)} pts`;
   });
 }
 
-function updateChargingUI() {
-  const best = state.bestLap ? fmtTime(state.bestLap) : '2:38';
-  document.getElementById('charging-best').textContent = best;
-  document.getElementById('charging-sources').textContent = '×' + totalSources();
+function uiCharging() {
+  document.getElementById('ch-best').textContent = st.best ? fmtT(st.best) : '2:38';
+  document.getElementById('ch-srcs').textContent = '×'+totalSrcs();
 }
 
-function fmtTime(ms) {
-  const m = Math.floor(ms / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  const cs = Math.floor((ms % 1000) / 10);
-  return `${m}:${String(s).padStart(2,'0')}.${String(cs).padStart(2,'0')}`;
+/* ── PURCHASE ── */
+function buySrc(k) {
+  const cfg = SRC_CFG[k];
+  if (cfg.minPts && st.pts < cfg.minPts) { toast(`Necesitas ${fmt(cfg.minPts)} pts`); return; }
+  if (st.pts < cfg.cost) { toast(`Puntos insuficientes`); return; }
+  st.pts -= cfg.cost;
+  st.srcs[k] = (st.srcs[k]||0)+1;
+  saveSt(); uiPlanta();
+  toast(`✓ ${cfg.name} — regen ×${regenRate().toFixed(2)}`);
 }
 
-/* ═══════════════════════════════════════════════════
-   PURCHASE LOGIC
-═══════════════════════════════════════════════════ */
-function buySource(key) {
-  const cfg = SOURCES_CONFIG[key];
-  if (cfg.minPts && state.points < cfg.minPts) {
-    showToast(`Necesitas ${fmtPts(cfg.minPts)} pts para desbloquear`);
-    return;
-  }
-  if (state.points < cfg.cost) {
-    showToast(`Puntos insuficientes (necesitas ${fmtPts(cfg.cost)})`);
-    return;
-  }
-  state.points -= cfg.cost;
-  state.sources[key] = (state.sources[key] || 0) + 1;
-  saveState();
-  updatePlantaUI();
-  showToast(`✓ ${cfg.name} añadida — regen ×${energyRegenRate().toFixed(2)}`);
+/* ── TOAST ── */
+let _tt;
+function toast(msg) {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('on');
+  clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('on'),2600);
 }
 
-/* ═══════════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════════ */
-let toastTimer = null;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-/* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    GAME ENGINE
-═══════════════════════════════════════════════════ */
+═══════════════════════════════════════════════ */
 const TOTAL_LAPS = 3;
-const ROAD_MARKERS_PER_LAP = 20;
+const LAP_DIST   = 2400;
+const NLANES     = 3;
 
-const gameState = {
-  running: false,
-  raf: null,
-  energy: 100,
-  speed: 3,
-  boostActive: false,
-  keys: { left: false, right: false },
-  playerX: 0,
-  score: 0,
-  orbs: [],
-  markers: [],
-  buildings: [],
-  opponents: [],
-  lapProgress: 0,
-  lap: 1,
-  sessionPoints: 0,
-  startTime: 0,
-  elapsed: 0,
-  lapTimes: [],
-  lapStart: 0,
-  orbsCollected: 0,
-  particles: [],
+let canvas, ctx, W, H, DPR;
+let hudTH, hudBH, gTop, gBot, gH;
+
+function horizonY()  { return gTop + gH * 0.38; }
+function roadAt(y) {
+  const hy = horizonY();
+  const t = Math.max(0, (y - hy) / (gBot - hy));
+  const hw = (W * 0.06) + (W * 0.42) * t;
+  return { left: W/2 - hw, right: W/2 + hw, hw };
+}
+function laneX(lane, y) {
+  const r = roadAt(y);
+  const lw = (r.right - r.left) / NLANES;
+  return r.left + lw * (lane + 0.5);
+}
+
+const G = {
+  running: false, raf: null,
+  energy: 100, boost: false,
+  lane: 1, targetLane: 1, visualX: 0,
+  dist: 0, lap: 1, lapDist: 0,
+  sessionPts: 0, orbsGot: 0,
+  t0: 0, elapsed: 0,
+  lapT0: 0, lapTimes: [],
+  orbs: [], foes: [], particles: [],
+  roadLines: [],
+  kerbOffset: 0,
+  bgTrees: [],
 };
 
-let canvas, ctx;
+function stopGame() {
+  G.running = false;
+  cancelAnimationFrame(G.raf);
+}
 
 function startGame() {
   showScreen('game');
 
-  canvas = document.getElementById('gameCanvas');
-  ctx = canvas.getContext('2d');
-
   const app = document.getElementById('app');
-  canvas.width = app.clientWidth;
-  canvas.height = app.clientHeight;
+  const hudT = document.getElementById('ghud-t');
+  const hudB = document.getElementById('ghud-b');
 
-  Object.assign(gameState, {
-    running: true,
-    energy: Math.min(100, state.energy + 0),
-    boostActive: false,
-    keys: { left: false, right: false },
-    playerX: canvas.width / 2,
-    score: 0,
-    orbs: [],
-    markers: [],
-    buildings: [],
-    opponents: [],
-    lapProgress: 0,
-    lap: 1,
-    sessionPoints: 0,
-    startTime: performance.now(),
-    elapsed: 0,
-    lapTimes: [],
-    lapStart: performance.now(),
-    orbsCollected: 0,
-    particles: [],
+  DPR = window.devicePixelRatio || 1;
+  W = app.clientWidth;
+  H = app.clientHeight;
+
+  canvas = document.getElementById('gc');
+  canvas.width  = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  hudTH = hudT.offsetHeight;
+  hudBH = hudB.offsetHeight;
+  gTop  = hudTH;
+  gBot  = H - hudBH;
+  gH    = gBot - gTop;
+
+  Object.assign(G, {
+    running:false, boost:false,
+    energy: Math.min(100, st.energy),
+    lane:1, targetLane:1, visualX: laneX(1, gBot-50),
+    dist:0, lap:1, lapDist:0,
+    sessionPts:0, orbsGot:0,
+    t0:0, elapsed:0, lapT0:0, lapTimes:[],
+    orbs:[], foes:[], particles:[],
+    roadLines:[], kerbOffset:0,
+    bgTrees:[],
   });
 
-  document.getElementById('game-over').style.display = 'none';
+  document.getElementById('gover').style.display = 'none';
 
-  for (let i = 0; i < 10; i++) {
-    gameState.markers.push({
-      y: canvas.height * 0.55 - i * 60,
-      counted: false,
-    });
+  for (let i=0; i<10; i++) {
+    G.roadLines.push({ y: gTop + (gH/10) * i, phase: Math.random() });
   }
 
-  gameState.opponents = [
-    { x: canvas.width * 0.45, y: canvas.height * 0.38, speed: 2.2, phase: 0 },
-    { x: canvas.width * 0.55, y: canvas.height * 0.28, speed: 1.8, phase: 1 },
+  for (let i=0; i<12; i++) {
+    G.bgTrees.push(mkTree(i/12));
+  }
+
+  G.foes = [
+    { lane:0, y: gTop + gH*0.25, speed:0.85, phase:0 },
+    { lane:2, y: gTop + gH*0.15, speed:0.7,  phase:2 },
   ];
 
-  cancelAnimationFrame(gameState.raf);
-  gameState.raf = requestAnimationFrame(gameLoop);
+  runCountdown(3, ()=>{
+    G.t0 = performance.now();
+    G.lapT0 = G.t0;
+    G.running = true;
+    G.raf = requestAnimationFrame(gameLoop);
+  });
 }
 
-function roadXAt(y) {
-  const H = canvas.height;
-  const horizon = H * 0.35;
-  const t = Math.max(0, Math.min(1, (y - horizon) / (H - horizon)));
-  const halfW = canvas.width * 0.08 + (canvas.width * 0.44) * t;
-  return { left: canvas.width / 2 - halfW, right: canvas.width / 2 + halfW };
+function mkTree(t) {
+  const side = Math.random() < 0.5 ? 'L' : 'R';
+  return { side, t, h: 30+Math.random()*50, color: Math.random()<0.5 ? '#1a4a2a' : '#004656' };
+}
+
+function runCountdown(n, cb) {
+  const el = document.getElementById('cnum');
+  const box = document.getElementById('countdown');
+  box.style.display = 'flex';
+  if (n === 0) {
+    el.textContent = 'GO!';
+    el.style.opacity = 1;
+    setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>{ box.style.display='none'; cb(); },200); },600);
+    return;
+  }
+  el.textContent = n;
+  el.style.opacity = 1;
+  setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>runCountdown(n-1,cb),200); },700);
 }
 
 function gameLoop(ts) {
-  if (!gameState.running) return;
-  gameState.elapsed = ts - gameState.startTime;
-  update(ts);
+  if (!G.running) return;
+  const dt = Math.min(32, ts - (G._prev||ts));
+  G._prev = ts;
+  G.elapsed = ts - G.t0;
+  update(dt);
   render();
-  gameState.raf = requestAnimationFrame(gameLoop);
+  G.raf = requestAnimationFrame(gameLoop);
 }
 
-function update(ts) {
-  const gs = gameState;
-  const regen = energyRegenRate();
+function update(dt) {
+  const regen = regenRate();
+  const drain = G.boost ? 1.8 : 0.18;
+  const rep   = 0.05 * regen;
+  G.energy = Math.max(0, Math.min(100, G.energy - drain + rep));
+  if (G.energy < 2) G.boost = false;
+  st.energy = G.energy;
 
-  const drainRate = gs.boostActive ? 1.5 : 0.3;
-  const regenPerFrame = 0.04 * regen;
-  gs.energy = Math.max(0, Math.min(100, gs.energy - drainRate + regenPerFrame));
-  state.energy = gs.energy;
+  const spd = (3 + (G.energy/100)*3.5) * (G.boost ? 2.0 : 1) * (dt/16.67);
 
-  const baseSpeed = 3 + (gs.energy / 100) * 2;
-  gs.speed = gs.boostActive && gs.energy > 5 ? baseSpeed * 1.8 : baseSpeed;
+  G.dist += spd;
+  G.lapDist += spd;
+  G.kerbOffset = (G.kerbOffset + spd) % 32;
 
-  const road = roadXAt(canvas.height - 80);
-  const playerW = 30;
-  if (gs.keys.left)  gs.playerX = Math.max(road.left + playerW, gs.playerX - 4);
-  if (gs.keys.right) gs.playerX = Math.min(road.right - playerW, gs.playerX + 4);
+  const tx = laneX(G.targetLane, gBot-50);
+  G.visualX += (tx - G.visualX) * Math.min(1, dt * 0.012);
 
-  gs.markers.forEach(m => { m.y += gs.speed; });
+  if (G.lapDist >= LAP_DIST) {
+    G.lapDist -= LAP_DIST;
+    const lapMs = G.elapsed - (G.lapTimes.reduce((a,b)=>a+b,0));
+    G.lapTimes.push(lapMs);
+    if (G.lap >= TOTAL_LAPS) { endGame(); return; }
+    G.lap++;
+    toast(`¡Vuelta ${G.lap}! 🏁`);
+  }
 
-  gs.markers = gs.markers.filter(m => {
-    if (m.y > canvas.height + 10) {
-      if (!m.counted) {
-        m.counted = true;
-        gs.lapProgress++;
-        gs.score += 2;
-        gs.sessionPoints += 2;
-      }
+  G.roadLines.forEach(l => {
+    l.y += spd * 1.1;
+    if (l.y > gBot + 20) l.y = horizonY() + 4;
+  });
+
+  G.bgTrees.forEach(tr => {
+    tr.t += spd * 0.0006;
+    if (tr.t > 1) tr.t -= 1;
+  });
+
+  if (Math.random() < 0.018 * (dt/16.67) && G.orbs.length < 7) {
+    const lane = Math.floor(Math.random()*NLANES);
+    const hy = horizonY();
+    G.orbs.push({ lane, y: hy+8, collected:false, pulse:Math.random()*Math.PI*2 });
+  }
+
+  G.orbs.forEach(o => { o.y += spd * 1.08; o.pulse += 0.1; });
+
+  const py = gBot - 50;
+  G.orbs = G.orbs.filter(o => {
+    if (o.collected || o.y > gBot+30) return false;
+    const ox = laneX(o.lane, o.y);
+    const threshold = 40 + (o.y - horizonY()) / (gBot - horizonY()) * 20;
+    const dx = Math.abs(ox - G.visualX);
+    const dy = Math.abs(o.y - py);
+    if (dx < threshold && dy < threshold*0.8 && o.lane === G.targetLane) {
+      G.energy = Math.min(100, G.energy+14);
+      G.sessionPts += 8;
+      G.orbsGot++;
+      for (let i=0;i<8;i++) G.particles.push({
+        x:ox, y:o.y,
+        vx:(Math.random()-.5)*5, vy:(Math.random()-1.4)*5,
+        life:1, r:5
+      });
       return false;
     }
     return true;
   });
 
-  while (gs.markers.length < 12) {
-    const last = gs.markers.length > 0 ? Math.min(...gs.markers.map(m => m.y)) : canvas.height * 0.55;
-    gs.markers.push({ y: last - 60, counted: false });
-  }
+  G.sessionPts += spd * 0.016;
 
-  if (gs.lapProgress >= ROAD_MARKERS_PER_LAP) {
-    gs.lapProgress = 0;
-    const lapTime = ts - gs.lapStart;
-    gs.lapTimes.push(lapTime);
-    gs.lapStart = ts;
-    if (gs.lap >= TOTAL_LAPS) {
-      endGame();
-      return;
-    }
-    gs.lap++;
-    showToast(`¡Vuelta ${gs.lap}! 🏁`);
-  }
+  G.particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.15; p.life-=0.05; });
+  G.particles = G.particles.filter(p=>p.life>0);
 
-  if (Math.random() < 0.025 && gs.orbs.length < 6) {
-    const oy = canvas.height * 0.45;
-    const roadO = roadXAt(oy);
-    const ox = roadO.left + Math.random() * (roadO.right - roadO.left);
-    gs.orbs.push({ x: ox, y: oy, r: 10, alpha: 1, pulse: Math.random() * Math.PI * 2 });
-  }
-
-  gs.orbs.forEach(o => { o.y += gs.speed * 1.05; o.pulse += 0.1; });
-
-  const px = gs.playerX;
-  const py = canvas.height - 80;
-  gs.orbs = gs.orbs.filter(o => {
-    const dist = Math.hypot(o.x - px, o.y - py);
-    if (dist < 32) {
-      gs.energy = Math.min(100, gs.energy + 10);
-      gs.score += 5;
-      gs.sessionPoints += 5;
-      gs.orbsCollected++;
-      for (let i = 0; i < 6; i++) {
-        gs.particles.push({
-          x: o.x, y: o.y,
-          vx: (Math.random() - 0.5) * 4,
-          vy: (Math.random() - 1.5) * 4,
-          life: 1, color: '#90FFBB',
-        });
-      }
-      return false;
-    }
-    return o.y < canvas.height + 20;
+  G.foes.forEach((f,i)=>{
+    f.phase += dt*0.0015;
+    f.y = gTop + gH * (0.18 + i*0.12);
   });
 
-  gs.particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.life -= 0.04; });
-  gs.particles = gs.particles.filter(p => p.life > 0);
+  document.getElementById('g-pos').textContent   = '2°';
+  document.getElementById('g-lap').textContent   = `${G.lap}/${TOTAL_LAPS}`;
+  document.getElementById('g-time').textContent  = fmtT(G.elapsed);
+  document.getElementById('g-score').textContent = Math.round(G.sessionPts);
+  document.getElementById('g-ebar').style.width  = G.energy+'%';
+  document.getElementById('g-epct').textContent  = Math.round(G.energy)+'%';
 
-  gs.opponents.forEach((op, i) => {
-    op.phase += 0.02;
-    op.x = canvas.width / 2 + Math.sin(op.phase + i * 2) * canvas.width * 0.12;
-  });
-
-  document.getElementById('hud-pos').textContent = '2°';
-  document.getElementById('hud-lap').textContent = `${gs.lap} / ${TOTAL_LAPS}`;
-  document.getElementById('hud-time').textContent = fmtTime(gs.elapsed);
-  document.getElementById('hud-score').textContent = gs.score;
-  document.getElementById('game-energy-bar').style.width = gs.energy + '%';
-  document.getElementById('game-energy-pct').textContent = Math.round(gs.energy) + '%';
-
-  const bb = document.getElementById('boost-btn');
-  if (gs.energy < 5) {
-    bb.classList.add('disabled');
-  } else {
-    bb.classList.remove('disabled');
-    bb.classList.toggle('active', gs.boostActive);
-  }
+  const bb = document.getElementById('b-B');
+  if (G.energy<3) { bb.classList.add('off'); bb.classList.remove('on'); }
+  else { bb.classList.remove('off'); bb.classList.toggle('on', G.boost); }
 }
 
 function render() {
-  const gs = gameState;
-  const W = canvas.width, H = canvas.height;
-  const horizon = H * 0.35;
-  const hudTop = 90, hudBot = 110;
+  ctx.clearRect(0,0,W,H);
 
-  const sky = ctx.createLinearGradient(0, hudTop, 0, horizon);
-  sky.addColorStop(0, '#004656');
+  const hy = horizonY();
+
+  const sky = ctx.createLinearGradient(0, gTop, 0, hy);
+  sky.addColorStop(0, '#001f2e');
+  sky.addColorStop(0.5, '#004656');
   sky.addColorStop(1, '#047DBA');
   ctx.fillStyle = sky;
-  ctx.fillRect(0, hudTop, W, horizon - hudTop);
+  ctx.fillRect(0, gTop, W, hy - gTop);
 
-  const ground = ctx.createLinearGradient(0, horizon, 0, H - hudBot);
-  ground.addColorStop(0, '#1a3a2a');
-  ground.addColorStop(1, '#0d2015');
+  const glow = ctx.createLinearGradient(0, hy-20, 0, hy+20);
+  glow.addColorStop(0,'rgba(144,255,187,0)');
+  glow.addColorStop(.5,'rgba(144,255,187,0.12)');
+  glow.addColorStop(1,'rgba(144,255,187,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, hy-20, W, 40);
+
+  drawBgDecor(hy);
+
+  const ground = ctx.createLinearGradient(0, hy, 0, gBot);
+  ground.addColorStop(0, '#143520');
+  ground.addColorStop(1, '#0a2010');
   ctx.fillStyle = ground;
-  ctx.fillRect(0, horizon, W, H - horizon - hudBot);
+  ctx.fillRect(0, hy, W, gBot-hy);
 
-  const roadTop = roadXAt(horizon);
-  const roadBot = roadXAt(H - hudBot);
-  ctx.beginPath();
-  ctx.moveTo(roadTop.left, horizon);
-  ctx.lineTo(roadTop.right, horizon);
-  ctx.lineTo(roadBot.right, H - hudBot);
-  ctx.lineTo(roadBot.left, H - hudBot);
-  ctx.closePath();
-  const roadGrad = ctx.createLinearGradient(0, horizon, 0, H - hudBot);
-  roadGrad.addColorStop(0, '#2a2a2a');
-  roadGrad.addColorStop(1, '#1a1a1a');
-  ctx.fillStyle = roadGrad;
-  ctx.fill();
+  drawRoad(hy);
+  drawLaneLines(hy);
+  drawOrbs(hy);
+  drawParticles();
 
-  ctx.strokeStyle = '#ffffff33';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(roadTop.left, horizon);
-  ctx.lineTo(roadBot.left, H - hudBot);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(roadTop.right, horizon);
-  ctx.lineTo(roadBot.right, H - hudBot);
-  ctx.stroke();
-
-  ctx.strokeStyle = '#E0FF48';
-  ctx.setLineDash([18, 18]);
-  ctx.lineWidth = 2;
-  gs.markers.forEach(m => {
-    if (m.y > horizon && m.y < H - hudBot) {
-      const rL = roadXAt(m.y);
-      const cx = (rL.left + rL.right) / 2;
-      const t = (m.y - horizon) / (H - hudBot - horizon);
-      ctx.lineWidth = 1 + t * 2;
-      ctx.beginPath();
-      ctx.moveTo(cx, m.y);
-      ctx.lineTo(cx, m.y + 16);
-      ctx.stroke();
-    }
-  });
-  ctx.setLineDash([]);
-
-  drawBuildings(W, H, horizon, hudTop);
-
-  gs.orbs.forEach(o => {
-    if (o.y < horizon || o.y > H - hudBot) return;
-    const pulse = 0.85 + Math.sin(o.pulse) * 0.15;
-    const r = o.r * pulse;
-    const grd = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r * 2.5);
-    grd.addColorStop(0, '#90FFBBcc');
-    grd.addColorStop(1, '#90FFBB00');
-    ctx.fillStyle = grd;
-    ctx.beginPath();
-    ctx.arc(o.x, o.y, r * 2.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#90FFBB';
-    ctx.beginPath();
-    ctx.arc(o.x, o.y, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#ffffff88';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
+  G.foes.forEach(f => {
+    const fx = laneX(f.lane, f.y);
+    const sc = perspScale(f.y, hy);
+    drawCar(fx, f.y, '#F3BDFF', sc, false);
   });
 
-  gs.particles.forEach(p => {
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 4 * p.life, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  ctx.globalAlpha = 1;
+  if (G.boost && G.energy>3) drawBoostTrail();
+  drawCar(G.visualX, gBot-50, '#E0FF48', 1, true);
 
-  gs.opponents.forEach(op => {
-    if (op.y > H - hudBot || op.y < horizon) return;
-    const t = (op.y - horizon) / (H - hudBot - horizon);
-    const scale = 0.3 + t * 0.4;
-    drawCar(op.x, op.y, '#F3BDFF', scale);
-  });
+  const lapPct = G.lapDist / LAP_DIST;
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.fillRect(0, gTop, W, 4);
+  const lpg = ctx.createLinearGradient(0,0,W*lapPct,0);
+  lpg.addColorStop(0,'#90FFBB'); lpg.addColorStop(1,'#1bc78a');
+  ctx.fillStyle = lpg;
+  ctx.fillRect(0, gTop, W*lapPct, 4);
 
-  drawCar(gs.playerX, H - 80, '#E0FF48', 1);
-
-  if (gs.boostActive && gs.energy > 5) {
-    const trailGrd = ctx.createLinearGradient(gs.playerX, H - 60, gs.playerX, H - 60 + 50);
-    trailGrd.addColorStop(0, '#E0FF4888');
-    trailGrd.addColorStop(1, '#E0FF4800');
-    ctx.fillStyle = trailGrd;
-    ctx.beginPath();
-    ctx.ellipse(gs.playerX, H - 55, 12, 40, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  const lapPct = gs.lapProgress / ROAD_MARKERS_PER_LAP;
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.fillRect(0, hudTop, W, 4);
-  ctx.fillStyle = '#90FFBB';
-  ctx.fillRect(0, hudTop, W * lapPct, 4);
+  ctx.fillStyle='#000';
+  ctx.fillRect(0,0,W,gTop);
+  ctx.fillRect(0,gBot,W,H-gBot);
 }
 
-function drawBuildings(W, H, horizon, hudTop) {
-  const bldData = [
-    { x: 0, y: hudTop + 5, w: W * 0.28, h: horizon - hudTop - 5, color: '#004656', alpha: 0.85 },
-    { x: W * 0.04, y: hudTop + 20, w: W * 0.18, h: horizon - hudTop - 30, color: '#047DBA', alpha: 0.6 },
-    { x: W * 0.02, y: hudTop + 35, w: W * 0.14, h: horizon - hudTop - 50, color: '#E0FF4820', alpha: 1 },
-    { x: W * 0.72, y: hudTop + 5, w: W * 0.28, h: horizon - hudTop - 5, color: '#004656', alpha: 0.85 },
-    { x: W * 0.76, y: hudTop + 20, w: W * 0.18, h: horizon - hudTop - 30, color: '#F3BDFF', alpha: 0.4 },
-    { x: W * 0.80, y: hudTop + 35, w: W * 0.14, h: horizon - hudTop - 50, color: '#90FFBB20', alpha: 1 },
-  ];
+function perspScale(y, hy) {
+  const t = Math.max(0, (y - hy) / (gBot - hy));
+  return 0.22 + t * 0.78;
+}
 
-  bldData.forEach(b => {
-    ctx.globalAlpha = b.alpha;
-    ctx.fillStyle = b.color;
-    ctx.fillRect(b.x, b.y, b.w, b.h);
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = '#ffffff';
-    const cols = Math.floor(b.w / 12), rows = Math.floor(b.h / 16);
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        if (Math.random() < 0.6) {
-          ctx.fillRect(b.x + c * 12 + 3, b.y + r * 16 + 4, 6, 8);
-        }
+function drawRoad(hy) {
+  const rtop = roadAt(hy);
+  const rbot = roadAt(gBot);
+  ctx.beginPath();
+  ctx.moveTo(rtop.left, hy);
+  ctx.lineTo(rtop.right, hy);
+  ctx.lineTo(rbot.right, gBot);
+  ctx.lineTo(rbot.left, gBot);
+  ctx.closePath();
+  const rg = ctx.createLinearGradient(0, hy, 0, gBot);
+  rg.addColorStop(0,'#222222'); rg.addColorStop(1,'#181818');
+  ctx.fillStyle = rg;
+  ctx.fill();
+
+  drawKerb(rbot.left, hy, true);
+  drawKerb(rbot.right, hy, false);
+}
+
+function drawKerb(bx, hy, isLeft) {
+  const stripeH = 18;
+  const nStripes = Math.ceil((gBot - hy) / stripeH) + 2;
+  for (let i=0; i<nStripes; i++) {
+    const y1 = hy + (i-1)*stripeH - G.kerbOffset%stripeH;
+    const y2 = y1 + stripeH;
+    const t1 = Math.max(0, (y1-hy)/(gBot-hy));
+    const t2 = Math.max(0, (y2-hy)/(gBot-hy));
+    const r1 = roadAt(hy + t1*(gBot-hy));
+    const r2 = roadAt(hy + t2*(gBot-hy));
+    const kw1 = r1.hw * 0.06, kw2 = r2.hw * 0.06;
+    const color = i%2===0 ? '#cc2222' : '#ffffff';
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    if (isLeft) {
+      ctx.moveTo(r1.left, hy+t1*(gBot-hy));
+      ctx.lineTo(r1.left+kw1, hy+t1*(gBot-hy));
+      ctx.lineTo(r2.left+kw2, hy+t2*(gBot-hy));
+      ctx.lineTo(r2.left, hy+t2*(gBot-hy));
+    } else {
+      ctx.moveTo(r1.right, hy+t1*(gBot-hy));
+      ctx.lineTo(r1.right-kw1, hy+t1*(gBot-hy));
+      ctx.lineTo(r2.right-kw2, hy+t2*(gBot-hy));
+      ctx.lineTo(r2.right, hy+t2*(gBot-hy));
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+function drawLaneLines(hy) {
+  for (let d=1; d<NLANES; d++) {
+    G.roadLines.forEach(l => {
+      if (l.y < hy+2 || l.y > gBot-5) return;
+      const r = roadAt(l.y);
+      const xMid = r.left + (r.right-r.left) * (d/NLANES);
+      const t = (l.y-hy)/(gBot-hy);
+      const dh = 14 * t + 3;
+      const dw = Math.max(1, 2*t);
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fillRect(xMid - dw/2, l.y, dw, dh);
+    });
+  }
+}
+
+function drawBgDecor(hy) {
+  const signY = gTop + (hy-gTop)*0.55;
+  const signX = W*0.14;
+  ctx.save();
+  ctx.fillStyle = '#E0FF48';
+  ctx.shadowColor = '#E0FF48'; ctx.shadowBlur = 8;
+  ctx.fillRect(signX-30, signY-10, 60, 20);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#004656';
+  ctx.font = 'bold 12px Nunito,sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('moeve', signX, signY);
+  ctx.restore();
+
+  G.bgTrees.forEach(tr => {
+    const sc = 0.4 + tr.t * 0.6;
+    const bh = tr.h * sc;
+    const r = roadAt(hy);
+    let bx;
+    if (tr.side==='L') bx = r.left * (0.1 + tr.t * 0.8);
+    else               bx = r.right + (W-r.right)*(0.1+tr.t*0.7);
+    const bw = (16+Math.sin(tr.t*17)*8)*sc;
+    ctx.fillStyle = tr.color;
+    ctx.globalAlpha = 0.7 + tr.t*0.3;
+    ctx.fillRect(bx-bw/2, hy-bh, bw, bh);
+    ctx.fillStyle = '#E0FF4840';
+    for (let r2=0;r2<Math.floor(bh/10);r2++) {
+      for (let c=0;c<Math.floor(bw/8);c++) {
+        if ((r2+c)%2===0) ctx.fillRect(bx-bw/2+c*8+2, hy-bh+r2*10+2, 4, 6);
       }
     }
     ctx.globalAlpha = 1;
   });
-
-  ctx.save();
-  ctx.fillStyle = '#E0FF48';
-  ctx.font = 'bold 11px Nunito, sans-serif';
-  ctx.textAlign = 'center';
-  const signX = W * 0.12, signY = horizon - 20;
-  const signW = 56, signH = 18;
-  ctx.fillRect(signX - signW/2, signY - signH/2, signW, signH);
-  ctx.fillStyle = '#004656';
-  ctx.fillText('moeve', signX, signY + 4);
-  ctx.restore();
 }
 
-function drawCar(x, y, color, scale) {
+function drawOrbs(hy) {
+  G.orbs.forEach(o => {
+    if (o.y < hy+4 || o.y > gBot+10) return;
+    const ox = laneX(o.lane, o.y);
+    const sc = perspScale(o.y, hy);
+    const r = (10 + 4*Math.sin(o.pulse)) * sc;
+    const g2 = ctx.createRadialGradient(ox, o.y, 0, ox, o.y, r*2.8);
+    g2.addColorStop(0,'rgba(144,255,187,0.7)');
+    g2.addColorStop(1,'rgba(144,255,187,0)');
+    ctx.fillStyle = g2;
+    ctx.beginPath(); ctx.arc(ox,o.y,r*2.8,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#90FFBB';
+    ctx.shadowColor='#90FFBB'; ctx.shadowBlur=12*sc;
+    ctx.beginPath(); ctx.arc(ox,o.y,r,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.beginPath(); ctx.arc(ox-r*0.3, o.y-r*0.3, r*0.3, 0, Math.PI*2); ctx.fill();
+  });
+}
+
+function drawParticles() {
+  G.particles.forEach(p => {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = '#90FFBB';
+    ctx.shadowColor='#90FFBB'; ctx.shadowBlur=8;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+  });
+  ctx.globalAlpha=1;
+}
+
+function drawBoostTrail() {
+  const cx = G.visualX;
+  const by = gBot - 50;
+  for (let i=0; i<6; i++) {
+    const a = (0.4 - i*0.06) * (G.energy/100);
+    const yw = by + 28 + i*14;
+    ctx.fillStyle = `rgba(224,255,72,${a})`;
+    ctx.beginPath();
+    ctx.ellipse(cx, yw, 14-i, 18-i*2, 0, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function drawCar(x, y, color, sc, isPlayer) {
   ctx.save();
   ctx.translate(x, y);
-  ctx.scale(scale, scale);
+  ctx.scale(sc, sc);
 
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
   ctx.beginPath();
-  ctx.ellipse(0, 20, 22 * scale, 8 * scale, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 26, 20, 7, 0, 0, Math.PI*2);
   ctx.fill();
 
   ctx.fillStyle = color;
+  ctx.shadowColor = isPlayer ? '#E0FF4899' : 'transparent';
+  ctx.shadowBlur = isPlayer ? 16 : 0;
   ctx.beginPath();
-  ctx.roundRect(-18, -14, 36, 28, 6);
+  ctx.roundRect(-16,-18,32,38,8);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = isPlayer ? '#c8e600' : '#d8a8f0';
+  ctx.beginPath();
+  ctx.roundRect(-12,-28,24,14,5);
   ctx.fill();
 
-  ctx.fillStyle = color === '#E0FF48' ? '#c8e800' : '#e0a0ff';
+  ctx.fillStyle = 'rgba(0,50,70,0.65)';
   ctx.beginPath();
-  ctx.roundRect(-11, -24, 22, 14, 4);
+  ctx.roundRect(-9,-26,18,11,4);
   ctx.fill();
 
-  ctx.fillStyle = 'rgba(0,70,86,0.6)';
-  ctx.beginPath();
-  ctx.roundRect(-9, -22, 18, 10, 3);
-  ctx.fill();
+  ctx.fillStyle = isPlayer ? '#aacc00' : '#c090e0';
+  ctx.fillRect(-14, 16, 28, 5);
+  ctx.fillRect(-18, 17, 6, 3);
+  ctx.fillRect(12, 17, 6, 3);
 
-  ctx.fillStyle = '#333';
-  [[-16, -8], [16, -8], [-16, 10], [16, 10]].forEach(([wx, wy]) => {
-    ctx.beginPath();
-    ctx.ellipse(wx, wy, 6, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#666';
-    ctx.beginPath();
-    ctx.arc(wx, wy, 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#333';
+  const wclr = '#1a1a1a', wrclr = '#555';
+  [[-18,-10],[18,-10],[-18,14],[18,14]].forEach(([wx,wy])=>{
+    ctx.fillStyle=wclr;
+    ctx.beginPath(); ctx.ellipse(wx,wy,7,5,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=wrclr;
+    ctx.beginPath(); ctx.arc(wx,wy,3,0,Math.PI*2); ctx.fill();
   });
 
-  ctx.fillStyle = color === '#E0FF48' ? '#ffffff' : '#ffcccc';
-  ctx.fillRect(-16, -14, 8, 5);
-  ctx.fillRect(8, -14, 8, 5);
+  if (isPlayer) {
+    ctx.fillStyle = '#ff4444';
+    ctx.shadowColor='#ff4444'; ctx.shadowBlur=8;
+    ctx.fillRect(-13,16,8,4);
+    ctx.fillRect(5,16,8,4);
+    ctx.shadowBlur=0;
+  } else {
+    ctx.fillStyle = '#ffccaa';
+    ctx.fillRect(-12,-18,8,4);
+    ctx.fillRect(4,-18,8,4);
+  }
 
   ctx.restore();
 }
 
 function endGame() {
-  const gs = gameState;
-  gs.running = false;
-  cancelAnimationFrame(gs.raf);
-
-  const earnedPts = gs.sessionPoints;
-  state.points += earnedPts;
-  state.energy = gs.energy;
-
-  if (gs.lapTimes.length > 0) {
-    const bestThisRun = Math.min(...gs.lapTimes);
-    if (!state.bestLap || bestThisRun < state.bestLap) {
-      state.bestLap = bestThisRun;
-    }
+  G.running = false;
+  cancelAnimationFrame(G.raf);
+  const earned = Math.round(G.sessionPts);
+  st.pts += earned;
+  st.energy = G.energy;
+  if (G.lapTimes.length) {
+    const best = Math.min(...G.lapTimes);
+    if (!st.best || best < st.best) st.best = best;
   }
-
-  saveState();
-
-  document.getElementById('go-score-line').textContent = `Orbes recogidos: ${gs.orbsCollected} · Tiempo: ${fmtTime(gs.elapsed)}`;
-  document.getElementById('go-pts').textContent = '+' + fmtPts(earnedPts);
-  document.getElementById('go-best').textContent = state.bestLap ? `Mejor vuelta: ${fmtTime(state.bestLap)}` : '';
-  document.getElementById('game-over').style.display = 'flex';
+  saveSt();
+  document.getElementById('go-sl').textContent =
+    `Orbes: ${G.orbsGot} · Tiempo: ${fmtT(G.elapsed)}`;
+  document.getElementById('go-pts').textContent = '+'+fmt(earned);
+  document.getElementById('go-best').textContent = st.best ? `Mejor vuelta: ${fmtT(st.best)}` : '';
+  document.getElementById('gover').style.display = 'flex';
 }
 
-function pressKey(dir, down) {
-  gameState.keys[dir] = down;
-  const el = document.getElementById(dir === 'left' ? 'btn-left' : 'btn-right');
-  el.classList.toggle('pressed', down);
+function laneShift(dir) {
+  G.targetLane = Math.max(0, Math.min(NLANES-1, G.targetLane + dir));
+  const id = dir<0 ? 'b-L' : 'b-R';
+  const btn = document.getElementById(id);
+  btn.classList.add('hit');
+  setTimeout(()=>btn.classList.remove('hit'), 150);
 }
 
-function pressBoost(down) {
-  if (gameState.energy < 5) return;
-  gameState.boostActive = down;
+function boostPress(on) {
+  if (on && G.energy < 3) return;
+  G.boost = on;
 }
 
 document.addEventListener('keydown', e => {
-  if (currentScreen !== 'game') return;
-  if (e.key === 'ArrowLeft')  pressKey('left', true);
-  if (e.key === 'ArrowRight') pressKey('right', true);
-  if (e.key === ' ' || e.key === 'ArrowUp') { e.preventDefault(); pressBoost(true); }
+  if (curScreen !== 'game') return;
+  if (e.key==='ArrowLeft')  laneShift(-1);
+  if (e.key==='ArrowRight') laneShift(1);
+  if (e.key===' '||e.key==='ArrowUp') { e.preventDefault(); boostPress(true); }
 });
 document.addEventListener('keyup', e => {
-  if (currentScreen !== 'game') return;
-  if (e.key === 'ArrowLeft')  pressKey('left', false);
-  if (e.key === 'ArrowRight') pressKey('right', false);
-  if (e.key === ' ' || e.key === 'ArrowUp') pressBoost(false);
+  if (curScreen !== 'game') return;
+  if (e.key===' '||e.key==='ArrowUp') boostPress(false);
 });
 
 window.addEventListener('resize', () => {
-  if (currentScreen === 'game' && canvas) {
-    const app = document.getElementById('app');
-    canvas.width = app.clientWidth;
-    canvas.height = app.clientHeight;
-    gameState.playerX = canvas.width / 2;
-  }
+  if (curScreen==='game') startGame();
 });
 
-updateHomeUI();
+uiHome();
 <\/script>
 </body>
 </html>
