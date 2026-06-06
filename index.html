@@ -7,512 +7,453 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --blue: #047DBA; --dark-blue: #004656; --green: #90FFBB;
-  --yellow: #E0FF48; --pink: #F3BDFF; --bg: #F1F5F9;
-  --border: #DCE6F0; --text: #1a2b38; --muted: #6b7f90; --white: #fff;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#047DBA;--dk:#004656;--grn:#90FFBB;--yel:#E0FF48;--pnk:#F3BDFF;
+  --bg:#F1F5F9;--brd:#DCE6F0;--tx:#1a2b38;--mu:#6b7f90;--w:#fff
 }
-html, body { width:100%; height:100%; overflow:hidden;
-  font-family:'Nunito',system-ui,sans-serif; background:var(--bg); color:var(--text); }
+html,body{width:100%;height:100%;overflow:hidden;
+  font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+#app{width:100%;max-width:430px;height:100%;margin:0 auto;
+  position:relative;overflow:hidden;background:var(--bg)}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.screen.active{display:flex}
 
-#app { width:100%; max-width:430px; height:100%; margin:0 auto;
-  position:relative; overflow:hidden; background:var(--bg); }
+/* ─ HEADER ─ */
+.ghd{background:linear-gradient(135deg,var(--blue) 0%,#1bc78a 100%);
+  padding:46px 20px 22px;flex-shrink:0}
+.ghd.sm{padding:42px 20px 18px}
+.hrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.logo{font-size:22px;font-weight:900;color:#fff;letter-spacing:-.5px}
+.av{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.25);
+  border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:15px;color:#fff}
+.hi{font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:2px}
+.hin{font-size:22px;font-weight:800;color:#fff;margin-bottom:2px}
+.his{font-size:12px;font-weight:600;color:rgba(255,255,255,.65)}
 
-.screen { position:absolute; inset:0; display:none; flex-direction:column;
-  overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
-.screen.active { display:flex; }
+/* ─ SCROLL BODY ─ */
+.bd{flex:1;overflow-y:auto;padding:14px 14px 96px;
+  display:flex;flex-direction:column;gap:11px;-webkit-overflow-scrolling:touch}
 
-/* ── HEADER ── */
-.grad-hd { background:linear-gradient(135deg,var(--blue) 0%,#1bc78a 100%);
-  padding:46px 20px 22px; flex-shrink:0; }
-.grad-hd.sm { padding:42px 20px 18px; }
-.hd-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-.logo { font-size:22px; font-weight:900; color:#fff; letter-spacing:-.5px; }
-.avatar { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.25);
-  border:2px solid rgba(255,255,255,.5); display:flex; align-items:center;
-  justify-content:center; font-weight:800; font-size:15px; color:#fff; }
-.hi { font-size:12px; font-weight:600; color:rgba(255,255,255,.7); margin-bottom:2px; }
-.hi-name { font-size:22px; font-weight:800; color:#fff; margin-bottom:2px; }
-.hi-sub { font-size:12px; font-weight:600; color:rgba(255,255,255,.65); }
+/* ─ CARD ─ */
+.card{background:#fff;border-radius:16px;border:1px solid var(--brd);padding:15px}
+.cl{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--mu);margin-bottom:7px}
 
-/* ── BODY ── */
-.body { flex:1; overflow-y:auto; padding:14px 14px 96px;
-  display:flex; flex-direction:column; gap:11px; -webkit-overflow-scrolling:touch; }
+/* ─ PROGRESS ─ */
+.pt{height:10px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--brd)}
+.pf{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),#1bc78a);transition:width .4s}
+.pf.m{background:linear-gradient(90deg,var(--grn),#1bc78a)}
+.ebg{background:var(--bg);border:1px solid var(--brd);border-radius:20px;
+  padding:3px 10px;font-size:12px;font-weight:700;color:var(--blue)}
 
-/* ── CARD ── */
-.card { background:#fff; border-radius:16px; border:1px solid var(--border); padding:15px; }
-.clabel { font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase;
-  color:var(--muted); margin-bottom:7px; }
+/* ─ CHIPS ─ */
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.chip{background:#fff;border:1px solid var(--brd);border-radius:99px;
+  padding:4px 11px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ── POINTS ── */
-.pts-num { font-size:40px; font-weight:900; color:#1bc78a; line-height:1; letter-spacing:-1px; }
-.pts-sub { font-size:13px; font-weight:600; color:var(--muted); margin-top:3px; }
+/* ─ BUTTONS ─ */
+.btn{border:none;border-radius:12px;font-family:inherit;font-weight:800;
+  font-size:14px;letter-spacing:.5px;cursor:pointer;padding:14px 18px;
+  transition:opacity .15s,transform .1s;-webkit-tap-highlight-color:transparent}
+.btn:active{opacity:.85;transform:scale(.97)}
+.btn.bl{background:var(--blue);color:#fff;width:100%}
+.btn.ot{background:transparent;color:var(--tx);border:2px solid var(--brd);width:100%}
+.btn.gn{background:var(--grn);color:var(--dk);width:100%;font-size:16px}
+.brow{display:flex;gap:9px}
+.bpts{background:var(--blue);color:#fff;border-radius:8px;padding:6px 11px;
+  font-size:12px;font-weight:800;border:none;cursor:pointer;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;font-family:inherit}
+.bpts.off{background:var(--bg);color:var(--mu);border:1px solid var(--brd);cursor:default}
 
-/* ── PROGRESS ── */
-.ptrack { height:10px; background:var(--bg); border-radius:99px;
-  overflow:hidden; border:1px solid var(--border); }
-.pfill { height:100%; border-radius:99px;
-  background:linear-gradient(90deg,var(--blue),#1bc78a); transition:width .4s; }
-.pfill.mint { background:linear-gradient(90deg,var(--green),#1bc78a); }
+/* ─ PROMO ─ */
+.promo{background:linear-gradient(135deg,var(--dk),var(--blue));
+  border-radius:16px;padding:15px;color:#fff}
+.pt0{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--grn);margin-bottom:5px}
+.pt1{font-size:16px;font-weight:800;margin-bottom:3px}
+.pt2{font-size:12px;font-weight:600;opacity:.7}
 
-.ebadge { background:var(--bg); border:1px solid var(--border); border-radius:20px;
-  padding:3px 10px; font-size:12px; font-weight:700; color:var(--blue); }
+/* ─ NAV ─ */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;padding:9px 14px 14px;background:#fff;
+  border-top:1px solid var(--brd);display:flex;align-items:center;
+  justify-content:space-between;z-index:100;gap:4px}
+.npill{display:flex;align-items:center;gap:3px;flex:1;justify-content:space-around;
+  background:var(--bg);border:1px solid var(--brd);border-radius:99px;padding:5px 6px}
+.ni{display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:4px 8px;border-radius:99px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:background .15s}
+.ni.on{background:var(--dk)}
+.ni span{font-size:9px;font-weight:700;color:var(--mu)}
+.ni.on span{color:#fff}
+.ni svg{opacity:.45}
+.ni.on svg{opacity:1}
+.npay{width:48px;height:48px;border-radius:50%;background:var(--grn);border:none;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;
+  color:var(--dk);cursor:pointer;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(0,70,86,.2);-webkit-tap-highlight-color:transparent}
 
-/* ── CHIPS ── */
-.chips { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
-.chip { background:#fff; border:1px solid var(--border); border-radius:99px;
-  padding:4px 11px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:5px; }
-.dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+/* ─ BACK ─ */
+.bkrow{display:flex;align-items:center;gap:9px}
+.bkbtn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:20px;-webkit-tap-highlight-color:transparent}
+.stit{font-size:18px;font-weight:800;color:#fff}
 
-/* ── BUTTONS ── */
-.btn { border:none; border-radius:12px; font-family:inherit; font-weight:800;
-  font-size:14px; letter-spacing:.5px; cursor:pointer; padding:14px 18px;
-  transition:opacity .15s,transform .1s; -webkit-tap-highlight-color:transparent; }
-.btn:active { opacity:.85; transform:scale(.97); }
-.btn.blue { background:var(--blue); color:#fff; width:100%; }
-.btn.out  { background:transparent; color:var(--text); border:2px solid var(--border); width:100%; }
-.btn.grn  { background:var(--green); color:var(--dark-blue); width:100%; font-size:16px; }
-.btn-row  { display:flex; gap:9px; }
+/* ─ SOURCE CARDS ─ */
+.scard{background:#fff;border-radius:14px;border:1px solid var(--brd);
+  padding:13px 13px 13px 0;display:flex;align-items:center;gap:11px;
+  overflow:hidden;margin-bottom:9px}
+.sbar{width:5px;align-self:stretch;border-radius:0 4px 4px 0;flex-shrink:0;min-height:58px}
+.sico{font-size:22px;flex-shrink:0}
+.sinf{flex:1;min-width:0}
+.snm{font-size:14px;font-weight:800}
+.ssb{font-size:11px;font-weight:600;color:var(--mu);margin-top:1px}
+.sbn{font-size:10px;font-weight:700;color:#1bc78a;margin-top:2px}
 
-.bpts { background:var(--blue); color:#fff; border-radius:8px; padding:6px 11px;
-  font-size:12px; font-weight:800; border:none; cursor:pointer; white-space:nowrap;
-  -webkit-tap-highlight-color:transparent; font-family:inherit; }
-.bpts:active { opacity:.8; }
-.bpts.off { background:var(--bg); color:var(--muted); border:1px solid var(--border); cursor:default; }
+/* ─ CHARGING ─ */
+.cpct{font-size:56px;font-weight:900;color:var(--grn);line-height:1;margin:6px 0 3px}
+.cst{font-size:14px;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:10px}
+.tpill{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);
+  border-radius:99px;padding:6px 13px;font-size:13px;font-weight:700;color:#fff;
+  display:inline-flex;align-items:center;gap:5px;margin-top:7px}
+.icard{background:#fff;border-radius:14px;border:1px solid var(--brd);overflow:hidden;display:flex}
+.iacc{width:5px;background:var(--grn);flex-shrink:0}
+.ibdy{flex:1;padding:13px}
+.inm{font-size:15px;font-weight:800;margin-bottom:7px}
+.ist{display:flex;gap:14px}
+.isl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mu)}
+.isv{font-size:14px;font-weight:800}
+.infc{background:#fff;border-radius:14px;border:1px solid var(--brd);padding:15px}
+.inft{font-size:15px;font-weight:800;margin-bottom:11px}
+.infl{display:flex;flex-direction:column;gap:7px}
+.infi{display:flex;gap:7px;font-size:13px;font-weight:600;color:var(--mu)}
+.infh{font-size:13px;font-weight:700;color:var(--blue);
+  margin-top:11px;padding-top:11px;border-top:1px solid var(--brd)}
 
-/* ── PROMO ── */
-.promo { background:linear-gradient(135deg,var(--dark-blue),var(--blue));
-  border-radius:16px; padding:15px; color:#fff; }
-.promo-tag { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
-  color:var(--green); margin-bottom:5px; }
-.promo-t { font-size:16px; font-weight:800; margin-bottom:3px; }
-.promo-s { font-size:12px; font-weight:600; opacity:.7; }
-
-/* ── NAV ── */
-.nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%);
-  width:100%; max-width:430px; padding:9px 14px 14px; background:#fff;
-  border-top:1px solid var(--border); display:flex; align-items:center;
-  justify-content:space-between; z-index:100; gap:4px; }
-.npill { display:flex; align-items:center; gap:3px; flex:1; justify-content:space-around;
-  background:var(--bg); border:1px solid var(--border); border-radius:99px; padding:5px 6px; }
-.ni { display:flex; flex-direction:column; align-items:center; gap:2px;
-  padding:4px 8px; border-radius:99px; cursor:pointer;
-  -webkit-tap-highlight-color:transparent; transition:background .15s; }
-.ni.on { background:var(--dark-blue); }
-.ni span { font-size:9px; font-weight:700; color:var(--muted); }
-.ni.on span { color:#fff; }
-.ni svg { opacity:.45; }
-.ni.on svg { opacity:1; }
-.npay { width:48px; height:48px; border-radius:50%; background:var(--green); border:none;
-  display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900;
-  color:var(--dark-blue); cursor:pointer; flex-shrink:0;
-  box-shadow:0 4px 12px rgba(0,70,86,.2); -webkit-tap-highlight-color:transparent; }
-
-/* ── BACK ── */
-.back-row { display:flex; align-items:center; gap:9px; }
-.back-btn { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.2);
-  border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
-  color:#fff; font-size:20px; -webkit-tap-highlight-color:transparent; }
-.stitle { font-size:18px; font-weight:800; color:#fff; }
-
-/* ── SOURCE CARDS ── */
-.src-card { background:#fff; border-radius:14px; border:1px solid var(--border);
-  padding:13px 13px 13px 0; display:flex; align-items:center; gap:11px;
-  overflow:hidden; margin-bottom:9px; }
-.src-bar { width:5px; align-self:stretch; border-radius:0 4px 4px 0; flex-shrink:0; min-height:58px; }
-.src-ico { font-size:22px; flex-shrink:0; }
-.src-info { flex:1; min-width:0; }
-.src-name { font-size:14px; font-weight:800; }
-.src-sub { font-size:11px; font-weight:600; color:var(--muted); margin-top:1px; }
-.src-bon { font-size:10px; font-weight:700; color:#1bc78a; margin-top:2px; }
-
-/* ── CHARGING ── */
-.chpct { font-size:56px; font-weight:900; color:var(--green); line-height:1; margin:6px 0 3px; }
-.chst { font-size:14px; font-weight:700; color:rgba(255,255,255,.8); margin-bottom:10px; }
-.tpill { background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.3);
-  border-radius:99px; padding:6px 13px; font-size:13px; font-weight:700; color:#fff;
-  display:inline-flex; align-items:center; gap:5px; margin-top:7px; }
-.inv-card { background:#fff; border-radius:14px; border:1px solid var(--border);
-  overflow:hidden; display:flex; }
-.inv-acc { width:5px; background:var(--green); flex-shrink:0; }
-.inv-body { flex:1; padding:13px; }
-.inv-name { font-size:15px; font-weight:800; margin-bottom:7px; }
-.inv-stats { display:flex; gap:14px; }
-.inv-sl { font-size:9px; font-weight:700; text-transform:uppercase;
-  letter-spacing:.5px; color:var(--muted); }
-.inv-sv { font-size:14px; font-weight:800; }
-.info-card { background:#fff; border-radius:14px; border:1px solid var(--border); padding:15px; }
-.info-t { font-size:15px; font-weight:800; margin-bottom:11px; }
-.info-list { display:flex; flex-direction:column; gap:7px; }
-.info-i { display:flex; gap:7px; font-size:13px; font-weight:600; color:var(--muted); }
-.info-hl { font-size:13px; font-weight:700; color:var(--blue);
-  margin-top:11px; padding-top:11px; border-top:1px solid var(--border); }
-
-/* ── TOAST ── */
-.toast { position:fixed; top:58px; left:50%; transform:translateX(-50%) translateY(-90px);
-  background:var(--dark-blue); color:#fff; padding:9px 18px; border-radius:99px;
-  font-size:13px; font-weight:700; z-index:999; transition:transform .28s ease;
-  pointer-events:none; white-space:nowrap; max-width:92%; font-family:inherit; }
-.toast.on { transform:translateX(-50%) translateY(0); }
+/* ─ TOAST ─ */
+.toast{position:fixed;top:58px;left:50%;transform:translateX(-50%) translateY(-90px);
+  background:var(--dk);color:#fff;padding:9px 18px;border-radius:99px;
+  font-size:13px;font-weight:700;z-index:999;transition:transform .28s ease;
+  pointer-events:none;white-space:nowrap;max-width:92%;font-family:inherit}
+.toast.on{transform:translateX(-50%) translateY(0)}
 
 /* ══════════════════════════════════
    GAME SCREEN
 ══════════════════════════════════ */
-#screen-game { background:#000; overflow:hidden; }
+#screen-game{background:#000820;overflow:hidden}
+#gc{display:block;position:absolute;inset:0;touch-action:none}
 
-#gc { display:block; position:absolute; inset:0; touch-action:none; }
-
-/* HUD top */
-.ghud-t { position:absolute; top:0; left:0; right:0; z-index:10;
-  background:linear-gradient(135deg,var(--blue),#1bc78a);
-  padding:38px 16px 10px; display:flex; justify-content:space-between; align-items:center; }
-.hs { display:flex; flex-direction:column; align-items:center; }
-.hs-l { font-size:9px; font-weight:700; letter-spacing:.8px; color:rgba(255,255,255,.7);
-  text-transform:uppercase; }
-.hs-v { font-size:20px; font-weight:900; color:#fff; line-height:1.1; }
-.hs-v.sm { font-size:15px; }
+/* HUD top — compact */
+.ghudt{position:absolute;top:0;left:0;right:0;z-index:10;
+  background:linear-gradient(180deg,rgba(0,8,32,.95) 0%,rgba(4,125,186,.7) 100%);
+  backdrop-filter:blur(4px);padding:36px 16px 8px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid rgba(144,255,187,.2)}
+.hst{display:flex;flex-direction:column;align-items:center}
+.hsl{font-size:8px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.55);text-transform:uppercase}
+.hsv{font-size:18px;font-weight:900;color:#fff;line-height:1.1}
+.hsv.sm{font-size:13px}
+.hsv.grn{color:var(--grn)}
 
 /* HUD bottom */
-.ghud-b { position:absolute; bottom:0; left:0; right:0; z-index:10;
-  background:#fff; border-top:1px solid var(--border);
-  border-radius:20px 20px 0 0; padding:11px 14px 24px; }
-.e-row { display:flex; align-items:center; gap:9px; margin-bottom:10px; }
-.e-lbl { font-size:10px; font-weight:800; letter-spacing:.6px;
-  color:var(--muted); white-space:nowrap; text-transform:uppercase; }
-.ctrl { display:flex; gap:9px; align-items:center; }
+.ghudb{position:absolute;bottom:0;left:0;right:0;z-index:10;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(8px);
+  border-top:1px solid var(--brd);border-radius:22px 22px 0 0;
+  padding:10px 14px 22px}
+.erow{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.elbl{font-size:9px;font-weight:800;letter-spacing:.8px;color:var(--mu);
+  white-space:nowrap;text-transform:uppercase;min-width:46px}
+.espd{font-size:9px;font-weight:800;color:var(--mu);white-space:nowrap;min-width:44px;text-align:right}
+.ctrl{display:flex;gap:8px;align-items:center}
 
-.cbtn { flex:0 0 72px; height:60px; border-radius:16px; border:2px solid var(--border);
-  background:#fff; display:flex; align-items:center; justify-content:center;
-  font-size:28px; cursor:pointer; -webkit-tap-highlight-color:transparent;
-  user-select:none; touch-action:none; transition:background .08s,transform .08s; }
-.cbtn.hit { background:var(--bg); transform:scale(.93); }
+.cbtn{flex:0 0 68px;height:62px;border-radius:18px;border:2px solid var(--brd);
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:26px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  user-select:none;touch-action:none;transition:background .08s,transform .08s,border-color .08s;
+  font-family:inherit}
+.cbtn.hit{background:#f0f4ff;border-color:var(--blue);transform:scale(.9)}
 
-.bbtn { flex:1; height:60px; border-radius:16px; border:none; background:var(--yellow);
-  color:var(--dark-blue); font-size:16px; font-weight:900; letter-spacing:1px;
-  cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none;
-  touch-action:none; transition:background .08s,transform .08s; font-family:inherit; }
-.bbtn.on { background:#c8e600; transform:scale(.96); box-shadow:0 0 20px #E0FF4888; }
-.bbtn.off { background:var(--bg); color:var(--muted); }
+.bbtn{flex:1;height:62px;border-radius:18px;border:none;background:var(--yel);
+  color:var(--dk);font-size:15px;font-weight:900;letter-spacing:1px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;
+  touch-action:none;font-family:inherit;
+  transition:background .1s,transform .1s,box-shadow .1s}
+.bbtn.on{background:#d4f000;transform:scale(.96);
+  box-shadow:0 0 0 3px rgba(224,255,72,.4),0 4px 20px rgba(224,255,72,.5)}
+.bbtn.off{background:var(--bg);color:var(--mu)}
+
+/* Combo display */
+.combo-hud{position:absolute;top:0;right:0;z-index:11;padding:8px 12px;
+  display:flex;flex-direction:column;align-items:flex-end}
 
 /* Game over */
-.gover { position:absolute; inset:0; background:rgba(0,70,86,.88);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  z-index:20; padding:28px; gap:14px; }
-.gover h2 { font-size:30px; font-weight:900; color:var(--yellow); text-align:center; }
-.gover .gsl { font-size:14px; font-weight:700; color:#fff; text-align:center; }
-.gcard { background:#fff; border-radius:16px; padding:18px; width:100%; text-align:center; }
-.gpts { font-size:38px; font-weight:900; color:#1bc78a; }
-.gptsl { font-size:12px; font-weight:600; color:var(--muted); }
+.gover{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,8,32,.9) 0%,rgba(0,70,86,.95) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:20;padding:28px;gap:13px}
+.gover h2{font-size:32px;font-weight:900;color:var(--yel);text-align:center;
+  text-shadow:0 0 30px rgba(224,255,72,.5)}
+.gover .gsl{font-size:14px;font-weight:700;color:rgba(255,255,255,.85);text-align:center}
+.gcard{background:#fff;border-radius:18px;padding:20px;width:100%;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.gpts{font-size:42px;font-weight:900;color:#1bc78a}
+.gptsl{font-size:12px;font-weight:600;color:var(--mu)}
 
 /* Countdown */
-.countdown { position:absolute; inset:0; display:flex; align-items:center;
-  justify-content:center; z-index:15; pointer-events:none; }
-.cnum { font-size:120px; font-weight:900; color:#fff; text-shadow:0 0 40px rgba(0,70,86,.8);
-  font-family:'Nunito',sans-serif; opacity:0; transition:opacity .15s; }
+.cdwn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  z-index:15;pointer-events:none;background:rgba(0,8,32,.5)}
+.cnum{font-size:130px;font-weight:900;color:#fff;font-family:'Nunito',sans-serif;
+  opacity:0;transform:scale(1.5);transition:opacity .15s,transform .3s;
+  text-shadow:0 0 60px rgba(144,255,187,.6)}
+.cnum.show{opacity:1;transform:scale(1)}
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- ═══════════════════════════════════════
-     SCREEN 1 — HOME
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════ SCREEN 1 — HOME ═══════════════════════ -->
 <div id="screen-home" class="screen active">
-  <div class="grad-hd" style="padding-bottom:8px;">
-    <div class="hd-row">
-      <div class="logo">moeve</div>
-      <div class="avatar">N</div>
-    </div>
+  <div class="ghd" style="padding-bottom:8px">
+    <div class="hrow"><div class="logo">moeve</div><div class="av">N</div></div>
     <div class="hi">¡Bienvenida de vuelta!</div>
-    <div class="hi-name">¡Hola, Nerea!</div>
-    <div class="hi-sub">Positive Motion Race</div>
+    <div class="hin">¡Hola, Nerea!</div>
+    <div class="his">Positive Motion Race</div>
   </div>
-
-  <div class="body">
-    <div class="card" style="text-align:center;padding:18px 14px 14px;">
-      <div class="clabel">Puntos acumulados</div>
-      <div class="pts-num" id="h-pts">0</div>
-      <div class="pts-sub">puntos totales</div>
+  <div class="bd">
+    <div class="card" style="text-align:center;padding:18px 14px 14px">
+      <div class="cl">Puntos acumulados</div>
+      <div style="font-size:42px;font-weight:900;color:#1bc78a;line-height:1;letter-spacing:-1px" id="h-pts">0</div>
+      <div style="font-size:13px;font-weight:600;color:var(--mu);margin-top:3px">puntos totales</div>
     </div>
-
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
-        <div style="font-size:15px;font-weight:700;">Energía</div>
-        <div class="ebadge" id="h-ebadge">62% · Nivel 4</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+        <div style="font-size:15px;font-weight:700">Energía</div>
+        <div class="ebg" id="h-ebg">62% · Nivel 4</div>
       </div>
-      <div class="ptrack"><div class="pfill" id="h-ebar" style="width:62%"></div></div>
+      <div class="pt"><div class="pf" id="h-eb" style="width:62%"></div></div>
       <div class="chips" id="h-chips"></div>
     </div>
-
-    <div class="btn-row">
-      <button class="btn blue" onclick="startGame()">JUGAR AHORA</button>
-      <button class="btn out" onclick="showScreen('planta')" style="flex:0 0 auto;padding:14px 16px;">MI PLANTA</button>
+    <div class="brow">
+      <button class="btn bl" onclick="startGame()">⚡ JUGAR AHORA</button>
+      <button class="btn ot" onclick="showScreen('planta')" style="flex:0 0 auto;padding:14px 16px">MI PLANTA</button>
     </div>
-
     <div class="promo">
-      <div class="promo-tag">Advergame</div>
-      <div class="promo-t">Positive Motion Race</div>
-      <div class="promo-s">Juega en el surtidor mientras cargas.</div>
+      <div class="pt0">Advergame</div>
+      <div class="pt1">Positive Motion Race</div>
+      <div class="pt2">Juega en el surtidor mientras cargas.</div>
     </div>
-
-    <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
-      <div><div class="clabel">Mejor vuelta</div>
-        <div style="font-size:20px;font-weight:900;" id="h-best">--:--</div></div>
-      <div style="text-align:center;"><div class="clabel">Ranking</div>
-        <div style="font-size:20px;font-weight:900;">#147</div></div>
-      <div style="text-align:right;"><div class="clabel">Fuentes</div>
-        <div style="font-size:20px;font-weight:900;" id="h-srcs">×0</div></div>
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+      <div><div class="cl">Mejor vuelta</div><div style="font-size:20px;font-weight:900" id="h-best">--:--</div></div>
+      <div style="text-align:center"><div class="cl">Ranking</div><div style="font-size:20px;font-weight:900">#147</div></div>
+      <div style="text-align:right"><div class="cl">Fuentes</div><div style="font-size:20px;font-weight:900" id="h-srcs">×0</div></div>
     </div>
-
-    <div class="card" style="display:flex;align-items:center;gap:11px;cursor:pointer;"
-         onclick="showScreen('charging')">
-      <div style="font-size:26px;">⚡</div>
+    <div class="card" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="showScreen('charging')">
+      <div style="font-size:26px">⚡</div>
       <div>
-        <div style="font-size:14px;font-weight:800;">Cargando en Estación Norte</div>
-        <div style="font-size:12px;font-weight:600;color:var(--muted);">72% · 12 min restantes</div>
+        <div style="font-size:14px;font-weight:800">Cargando en Estación Norte</div>
+        <div style="font-size:12px;font-weight:600;color:var(--mu)">72% · 12 min restantes</div>
       </div>
-      <div style="margin-left:auto;font-size:18px;color:var(--muted);">›</div>
+      <div style="margin-left:auto;font-size:18px;color:var(--mu)">›</div>
     </div>
   </div>
-
   <nav class="nav">
     <div class="npill">
       <div class="ni on" onclick="showScreen('home')">
-        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span>Inicio</span></div>
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Inicio</span></div>
       <div class="ni" onclick="showScreen('charging')">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        <span>Mapa</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Mapa</span></div>
       <div class="ni" onclick="startGame()">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <span>Gow</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Gow</span></div>
       <div class="ni">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <span>Perfil</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Perfil</span></div>
     </div>
     <button class="npay">Pagar<br>+</button>
   </nav>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-     SCREEN 2 — GAME
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════ SCREEN 2 — GAME ═══════════════════════ -->
 <div id="screen-game" class="screen">
   <canvas id="gc"></canvas>
 
-  <div class="ghud-t" id="ghud-t">
-    <div class="hs"><div class="hs-l">Posición</div><div class="hs-v" id="g-pos">2°</div></div>
-    <div class="hs"><div class="hs-l">Vuelta</div><div class="hs-v sm" id="g-lap">1/3</div></div>
-    <div class="hs"><div class="hs-l">Tiempo</div><div class="hs-v sm" id="g-time">0:00</div></div>
-    <div class="hs"><div class="hs-l">Puntos</div><div class="hs-v sm" id="g-score">0</div></div>
+  <div class="ghudt" id="ghudt">
+    <div class="hst"><div class="hsl">Posición</div><div class="hsv" id="g-pos">2°</div></div>
+    <div class="hst"><div class="hsl">Vuelta</div><div class="hsv sm" id="g-lap">1 / 3</div></div>
+    <div class="hst"><div class="hsl">Tiempo</div><div class="hsv sm" id="g-time">0:00</div></div>
+    <div class="hst"><div class="hsl">Puntos</div><div class="hsv sm grn" id="g-score">0</div></div>
   </div>
 
-  <div class="ghud-b" id="ghud-b">
-    <div class="e-row">
-      <div class="e-lbl">Energía</div>
-      <div class="ptrack" style="flex:1;">
-        <div class="pfill mint" id="g-ebar" style="width:100%"></div>
-      </div>
-      <div style="font-size:11px;font-weight:800;color:var(--muted);min-width:30px;text-align:right;" id="g-epct">100%</div>
+  <div class="ghudb" id="ghudb">
+    <div class="erow">
+      <div class="elbl">Energía</div>
+      <div class="pt" style="flex:1"><div class="pf m" id="g-eb" style="width:100%"></div></div>
+      <div class="espd" id="g-spd">— km/h</div>
     </div>
     <div class="ctrl">
-      <div class="cbtn" id="b-L"
-        ontouchstart="laneShift(-1)" onmousedown="laneShift(-1)">◁</div>
-      <button class="bbtn" id="b-B"
-        ontouchstart="boostPress(true)" ontouchend="boostPress(false)"
-        onmousedown="boostPress(true)" onmouseup="boostPress(false)">⚡ BOOST</button>
-      <div class="cbtn" id="b-R"
-        ontouchstart="laneShift(1)" onmousedown="laneShift(1)">▷</div>
+      <div class="cbtn" id="bL" ontouchstart="laneShift(-1,event)" onmousedown="laneShift(-1,event)">◁</div>
+      <button class="bbtn" id="bB"
+        ontouchstart="bp(true,event)" ontouchend="bp(false,event)"
+        onmousedown="bp(true,event)" onmouseup="bp(false,event)">⚡ BOOST</button>
+      <div class="cbtn" id="bR" ontouchstart="laneShift(1,event)" onmousedown="laneShift(1,event)">▷</div>
     </div>
   </div>
 
-  <div class="gover" id="gover" style="display:none;">
-    <h2>¡Carrera<br>terminada!</h2>
+  <div class="gover" id="gover" style="display:none">
+    <h2>¡Carrera<br>completada!</h2>
     <div class="gsl" id="go-sl">—</div>
     <div class="gcard">
-      <div class="gptsl">Puntos ganados</div>
+      <div class="gptsl">Puntos ganados esta carrera</div>
       <div class="gpts" id="go-pts">+0</div>
-      <div class="gptsl" style="margin-top:3px;" id="go-best"></div>
+      <div class="gptsl" style="margin-top:4px" id="go-best"></div>
     </div>
-    <button class="btn grn" onclick="startGame()">JUGAR DE NUEVO</button>
-    <button class="btn out" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3);"
+    <button class="btn gn" onclick="startGame()">🏁 JUGAR DE NUEVO</button>
+    <button class="btn ot" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.25)"
       onclick="showScreen('home')">VOLVER AL INICIO</button>
   </div>
 
-  <div class="countdown" id="countdown">
+  <div class="cdwn" id="cdwn" style="display:none">
     <div class="cnum" id="cnum">3</div>
   </div>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-     SCREEN 3 — PLANTA
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════ SCREEN 3 — PLANTA ═══════════════════════ -->
 <div id="screen-planta" class="screen">
-  <div class="grad-hd sm">
-    <div class="hd-row">
-      <div class="back-row">
-        <button class="back-btn" onclick="showScreen('home')">‹</button>
-        <div class="stitle">Mi planta energética</div>
+  <div class="ghd sm">
+    <div class="hrow">
+      <div class="bkrow">
+        <button class="bkbtn" onclick="showScreen('home')">‹</button>
+        <div class="stit">Mi planta energética</div>
       </div>
       <div class="logo">moeve</div>
     </div>
   </div>
-
-  <div class="body">
+  <div class="bd">
     <div class="card">
-      <div class="clabel">Puntos acumulados</div>
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;">
-        <div style="font-size:24px;font-weight:900;color:#1bc78a;" id="p-pts">0 pts</div>
-        <div style="font-size:12px;font-weight:700;color:var(--muted);" id="p-nxt">Próx. nivel: 1000 pts</div>
+      <div class="cl">Puntos acumulados</div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
+        <div style="font-size:24px;font-weight:900;color:#1bc78a" id="p-pts">0 pts</div>
+        <div style="font-size:12px;font-weight:700;color:var(--mu)" id="p-nxt">Próx. nivel: 1000 pts</div>
       </div>
-      <div class="ptrack"><div class="pfill" id="p-pbar" style="width:0%"></div></div>
-      <div style="margin-top:7px;font-size:12px;font-weight:700;color:var(--muted);">
-        Regen. energía: <span id="p-regen" style="color:var(--blue);">+1.00x</span>
+      <div class="pt"><div class="pf" id="p-pb" style="width:0%"></div></div>
+      <div style="margin-top:7px;font-size:12px;font-weight:700;color:var(--mu)">
+        Regen. energía: <span id="p-rg" style="color:var(--blue)">+1.00x</span>
       </div>
     </div>
-
     <div>
-      <div class="clabel" style="padding:0 3px 7px;">Fuentes de energía</div>
-      <div class="src-card" id="sc-solar">
-        <div class="src-bar" style="background:#90FFBB;"></div>
-        <div class="src-ico">☀️</div>
-        <div class="src-info">
-          <div class="src-name">Solar</div>
-          <div class="src-sub">Panel fotovoltaico · <span id="sc-solar-n">×0</span></div>
-          <div class="src-bon" id="sc-solar-b">+0% regen</div>
-        </div>
-        <button class="bpts" id="btn-solar" onclick="buySrc('solar')">+500 pts</button>
+      <div class="cl" style="padding:0 3px 7px">Fuentes de energía</div>
+      <div class="scard">
+        <div class="sbar" style="background:#90FFBB"></div><div class="sico">☀️</div>
+        <div class="sinf"><div class="snm">Solar</div>
+          <div class="ssb">Panel fotovoltaico · <span id="n-solar">×0</span></div>
+          <div class="sbn" id="b-solar">+0% regen</div></div>
+        <button class="bpts" id="btn-solar" onclick="buy('solar')">+500 pts</button>
       </div>
-      <div class="src-card" id="sc-wind">
-        <div class="src-bar" style="background:#047DBA;"></div>
-        <div class="src-ico">💨</div>
-        <div class="src-info">
-          <div class="src-name">Eólica</div>
-          <div class="src-sub">Aerogenerador · <span id="sc-wind-n">×0</span></div>
-          <div class="src-bon" id="sc-wind-b">+0% regen</div>
-        </div>
-        <button class="bpts" id="btn-wind" onclick="buySrc('wind')">+800 pts</button>
+      <div class="scard">
+        <div class="sbar" style="background:#047DBA"></div><div class="sico">💨</div>
+        <div class="sinf"><div class="snm">Eólica</div>
+          <div class="ssb">Aerogenerador · <span id="n-wind">×0</span></div>
+          <div class="sbn" id="b-wind">+0% regen</div></div>
+        <button class="bpts" id="btn-wind" onclick="buy('wind')">+800 pts</button>
       </div>
-      <div class="src-card" id="sc-hydrogen">
-        <div class="src-bar" style="background:#F3BDFF;"></div>
-        <div class="src-ico">⚗️</div>
-        <div class="src-info">
-          <div class="src-name">Hidrógeno verde</div>
-          <div class="src-sub">Electrolizador · <span id="sc-hydrogen-n">bloqueado</span></div>
-          <div class="src-bon" id="sc-hydrogen-b" style="color:var(--muted);">Requiere 2.000 pts</div>
-        </div>
-        <button class="bpts off" id="btn-hydrogen" onclick="buySrc('hydrogen')">+1500 pts</button>
+      <div class="scard">
+        <div class="sbar" style="background:#F3BDFF"></div><div class="sico">⚗️</div>
+        <div class="sinf"><div class="snm">Hidrógeno verde</div>
+          <div class="ssb">Electrolizador · <span id="n-hydrogen">bloqueado</span></div>
+          <div class="sbn" id="b-hydrogen" style="color:var(--mu)">Requiere 2.000 pts</div></div>
+        <button class="bpts off" id="btn-hydrogen" onclick="buy('hydrogen')">+1500 pts</button>
       </div>
-      <div class="src-card" id="sc-bio">
-        <div class="src-bar" style="background:#E0FF48;"></div>
-        <div class="src-ico">🌿</div>
-        <div class="src-info">
-          <div class="src-name">Biocombustible</div>
-          <div class="src-sub">Refinería bio · <span id="sc-bio-n">×0</span></div>
-          <div class="src-bon" id="sc-bio-b">+0% regen</div>
-        </div>
-        <button class="bpts" id="btn-bio" onclick="buySrc('bio')">+950 pts</button>
+      <div class="scard">
+        <div class="sbar" style="background:#E0FF48"></div><div class="sico">🌿</div>
+        <div class="sinf"><div class="snm">Biocombustible</div>
+          <div class="ssb">Refinería bio · <span id="n-bio">×0</span></div>
+          <div class="sbn" id="b-bio">+0% regen</div></div>
+        <button class="bpts" id="btn-bio" onclick="buy('bio')">+950 pts</button>
       </div>
     </div>
-
-    <div class="info-card">
-      <div class="info-t">¿Cómo funciona?</div>
-      <div class="info-list">
-        <div class="info-i"><span>⚡</span><span>Cada fuente añade +5% de regeneración de energía.</span></div>
-        <div class="info-i"><span>🚗</span><span>Más energía = mayor velocidad y boost más duradero.</span></div>
-        <div class="info-i"><span>🏆</span><span>Recoge orbes verdes en carrera para ganar puntos.</span></div>
+    <div class="infc">
+      <div class="inft">¿Cómo funciona?</div>
+      <div class="infl">
+        <div class="infi"><span>⚡</span><span>Cada fuente añade +5% de regeneración de energía.</span></div>
+        <div class="infi"><span>🚗</span><span>Más energía = mayor velocidad y boost más duradero.</span></div>
+        <div class="infi"><span>🏆</span><span>Combo de orbes multiplica los puntos ganados.</span></div>
       </div>
-      <div class="info-hl">Más fuentes = más velocidad</div>
+      <div class="infh">Más fuentes = más velocidad</div>
     </div>
   </div>
-
   <nav class="nav">
     <div class="npill">
       <div class="ni" onclick="showScreen('home')">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span>Inicio</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Inicio</span></div>
       <div class="ni" onclick="showScreen('charging')">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        <span>Mapa</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Mapa</span></div>
       <div class="ni on">
-        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c8 0 11-7 11-7s-1 4-6 6l.03.01C14.69 19.59 16 17.27 16 14c0-5-4-8-4-8z"/></svg>
-        <span>Planta</span></div>
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c8 0 11-7 11-7s-1 4-6 6l.03.01C14.69 19.59 16 17.27 16 14c0-5-4-8-4-8z"/></svg><span>Planta</span></div>
       <div class="ni">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <span>Perfil</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Perfil</span></div>
     </div>
     <button class="npay">Pagar<br>+</button>
   </nav>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-     SCREEN 4 — CHARGING
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════ SCREEN 4 — CHARGING ═══════════════════════ -->
 <div id="screen-charging" class="screen">
-  <div class="grad-hd">
-    <div class="hd-row">
-      <div class="back-row">
-        <button class="back-btn" onclick="showScreen('home')">‹</button>
-        <div class="stitle">Estación Norte</div>
-      </div>
+  <div class="ghd">
+    <div class="hrow">
+      <div class="bkrow"><button class="bkbtn" onclick="showScreen('home')">‹</button><div class="stit">Estación Norte</div></div>
       <div class="logo">moeve</div>
     </div>
-    <div class="chpct">72%</div>
-    <div class="chst">Carga en curso</div>
-    <div class="ptrack" style="margin-bottom:7px;">
-      <div class="pfill mint" style="width:72%;"></div></div>
+    <div class="cpct">72%</div>
+    <div class="cst">Carga en curso</div>
+    <div class="pt" style="margin-bottom:7px"><div class="pf m" style="width:72%"></div></div>
     <div class="tpill">⏱ 12 min restantes</div>
   </div>
-
-  <div class="body">
+  <div class="bd">
     <div class="card">
-      <div style="font-size:19px;font-weight:900;margin-bottom:3px;">Mientras cargas, juega.</div>
-      <div style="font-size:13px;font-weight:600;color:var(--muted);">12 min = 3 vueltas · Valle del Hidrógeno</div>
+      <div style="font-size:19px;font-weight:900;margin-bottom:3px">Mientras cargas, juega.</div>
+      <div style="font-size:13px;font-weight:600;color:var(--mu)">12 min = 3 vueltas · Valle del Hidrógeno</div>
     </div>
-    <div class="inv-card">
-      <div class="inv-acc"></div>
-      <div class="inv-body">
-        <div style="background:var(--yellow);color:var(--dark-blue);font-size:9px;font-weight:800;
+    <div class="icard">
+      <div class="iacc"></div>
+      <div class="ibdy">
+        <div style="background:var(--yel);color:var(--dk);font-size:9px;font-weight:800;
           letter-spacing:1px;padding:2px 7px;border-radius:99px;display:inline-block;
-          margin-bottom:7px;text-transform:uppercase;">En vivo</div>
-        <div class="inv-name">Positive Motion Race</div>
-        <div class="inv-stats">
-          <div><div class="inv-sl">Récord</div><div class="inv-sv" id="ch-best">2:38</div></div>
-          <div><div class="inv-sl">Ranking</div><div class="inv-sv">#147</div></div>
-          <div><div class="inv-sl">Energía</div><div class="inv-sv" id="ch-srcs">×0</div></div>
+          margin-bottom:7px;text-transform:uppercase">En vivo</div>
+        <div class="inm">Positive Motion Race</div>
+        <div class="ist">
+          <div><div class="isl">Récord</div><div class="isv" id="ch-best">2:38</div></div>
+          <div><div class="isl">Ranking</div><div class="isv">#147</div></div>
+          <div><div class="isl">Energía</div><div class="isv" id="ch-srcs">×0</div></div>
         </div>
       </div>
     </div>
-    <button class="btn grn" style="font-size:17px;padding:17px;" onclick="startGame()">Jugar ahora →</button>
-    <div class="info-card">
-      <div class="info-t">¿Cómo funciona?</div>
-      <div class="info-list">
-        <div class="info-i"><span>🎮</span><span>Juega mientras tu coche eléctrico carga.</span></div>
-        <div class="info-i"><span>⚡</span><span>Recoge orbes de energía verde y gana puntos moeve.</span></div>
-        <div class="info-i"><span>🌱</span><span>Invierte en fuentes renovables para ir más rápido.</span></div>
+    <button class="btn gn" style="font-size:17px;padding:17px" onclick="startGame()">Jugar ahora →</button>
+    <div class="infc">
+      <div class="inft">¿Cómo funciona?</div>
+      <div class="infl">
+        <div class="infi"><span>🎮</span><span>Juega mientras tu coche eléctrico carga.</span></div>
+        <div class="infi"><span>⚡</span><span>Recoge orbes y haz combos para multiplicar puntos.</span></div>
+        <div class="infi"><span>🌱</span><span>Invierte en fuentes renovables para ir más rápido.</span></div>
       </div>
-      <div class="info-hl">Más fuentes = más velocidad</div>
+      <div class="infh">Más fuentes = más velocidad</div>
     </div>
   </div>
-
   <nav class="nav">
     <div class="npill">
       <div class="ni" onclick="showScreen('home')">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span>Inicio</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Inicio</span></div>
       <div class="ni on">
-        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        <span>Mapa</span></div>
+        <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Mapa</span></div>
       <div class="ni" onclick="startGame()">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <span>Gow</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Gow</span></div>
       <div class="ni">
-        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <span>Perfil</span></div>
+        <svg width="18" height="18" fill="#6b7f90" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Perfil</span></div>
     </div>
     <button class="npay">Pagar<br>+</button>
   </nav>
@@ -522,646 +463,775 @@ html, body { width:100%; height:100%; overflow:hidden;
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════
-   ESTADO
-═══════════════════════════════════════════════ */
-const SRC_CFG = {
-  solar:    { name:'Solar',           cost:500,  bonus:.05 },
-  wind:     { name:'Eólica',          cost:800,  bonus:.05 },
-  hydrogen: { name:'Hidrógeno verde', cost:1500, bonus:.05, minPts:2000 },
-  bio:      { name:'Biocombustible',  cost:950,  bonus:.05 },
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+const SC = {
+  solar:    {name:'Solar',          cost:500,  b:.05},
+  wind:     {name:'Eólica',         cost:800,  b:.05},
+  hydrogen: {name:'Hidrógeno verde',cost:1500, b:.05, min:2000},
+  bio:      {name:'Biocombustible', cost:950,  b:.05},
 };
-
-function loadSt() {
+function ld() {
   try {
-    const s = JSON.parse(localStorage.getItem('moeve2') || '{}');
-    return {
-      pts:    s.pts    ?? 4280,
-      srcs:   s.srcs   ?? { solar:3, wind:1, hydrogen:0, bio:2 },
-      best:   s.best   ?? null,
-      energy: s.energy ?? 62,
-    };
-  } catch { return { pts:4280, srcs:{solar:3,wind:1,hydrogen:0,bio:2}, best:null, energy:62 }; }
+    const s = JSON.parse(localStorage.getItem('moeve3')||'{}');
+    return {pts:s.pts??4280,srcs:s.srcs??{solar:3,wind:1,hydrogen:0,bio:2},best:s.best??null,en:s.en??62};
+  } catch {return {pts:4280,srcs:{solar:3,wind:1,hydrogen:0,bio:2},best:null,en:62}}
 }
-function saveSt() { localStorage.setItem('moeve2', JSON.stringify(st)); }
+function sv() {localStorage.setItem('moeve3',JSON.stringify(st))}
+let st = ld();
+const totS = () => Object.values(st.srcs).reduce((a,b)=>a+b,0);
+const regen = () => 1 + totS()*0.05;
 
-let st = loadSt();
-const totalSrcs = () => Object.values(st.srcs).reduce((a,b)=>a+b,0);
-const regenRate = () => 1 + totalSrcs() * 0.05;
-
-/* ═══════════════════════════════════════════════
+/* ══════════════════════════════════════════
    ROUTING
-═══════════════════════════════════════════════ */
-let curScreen = 'home';
+══════════════════════════════════════════ */
+let cur = 'home';
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
-  curScreen = id;
-  if (id === 'home')     uiHome();
-  if (id === 'planta')   uiPlanta();
-  if (id === 'charging') uiCharging();
-  if (id !== 'game' && G.running) stopGame();
+  cur = id;
+  if (id==='home')     uiH();
+  if (id==='planta')   uiP();
+  if (id==='charging') uiC();
+  if (id!=='game' && G.running) {G.running=false;cancelAnimationFrame(G.raf)}
 }
 
-/* ═══════════════════════════════════════════════
-   UI HELPERS
-═══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   UI
+══════════════════════════════════════════ */
 const fmt = n => Math.round(n).toLocaleString('es-ES');
-function fmtT(ms) {
-  const m = Math.floor(ms/60000);
-  const s = Math.floor((ms%60000)/1000);
+const fmtT = ms => {
+  const m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000);
   return `${m}:${String(s).padStart(2,'0')}`;
-}
-
-function uiHome() {
+};
+function uiH() {
   document.getElementById('h-pts').textContent = fmt(st.pts);
-  const e = Math.round(st.energy);
-  const lv = Math.floor(e/25)+1;
-  document.getElementById('h-ebadge').textContent = `${e}% · Nivel ${lv}`;
-  document.getElementById('h-ebar').style.width = e+'%';
-  document.getElementById('h-best').textContent = st.best ? fmtT(st.best) : '--:--';
-  document.getElementById('h-srcs').textContent = '×'+totalSrcs();
-  const chips = document.getElementById('h-chips');
-  chips.innerHTML = '';
-  const cc = {solar:'#90FFBB',wind:'#047DBA',hydrogen:'#F3BDFF',bio:'#E0FF48'};
-  const cl = {solar:'Solar',wind:'Eólica',hydrogen:'H₂ verde',bio:'Bio'};
-  Object.entries(st.srcs).forEach(([k,v]) => {
-    if (!v) return;
-    chips.insertAdjacentHTML('beforeend',
-      `<div class="chip"><div class="dot" style="background:${cc[k]};"></div>${cl[k]} ×${v}</div>`);
+  const e=Math.round(st.en), lv=Math.floor(e/25)+1;
+  document.getElementById('h-ebg').textContent=`${e}% · Nivel ${lv}`;
+  document.getElementById('h-eb').style.width=e+'%';
+  document.getElementById('h-best').textContent=st.best?fmtT(st.best):'--:--';
+  document.getElementById('h-srcs').textContent='×'+totS();
+  const ch=document.getElementById('h-chips'); ch.innerHTML='';
+  const cc={solar:'#90FFBB',wind:'#047DBA',hydrogen:'#F3BDFF',bio:'#E0FF48'};
+  const cl={solar:'Solar',wind:'Eólica',hydrogen:'H₂ verde',bio:'Bio'};
+  Object.entries(st.srcs).forEach(([k,v])=>{
+    if(!v) return;
+    ch.insertAdjacentHTML('beforeend',
+      `<div class="chip"><div class="dot" style="background:${cc[k]}"></div>${cl[k]} ×${v}</div>`);
   });
 }
-
-function uiPlanta() {
-  document.getElementById('p-pts').textContent = fmt(st.pts)+' pts';
-  const lvls=[0,500,1000,2000,3500,5000,8000,12000];
-  let li=0;
-  lvls.forEach((v,i)=>{ if(st.pts>=v) li=i; });
-  const next=lvls[li+1]??lvls[lvls.length-1]*2, prev=lvls[li];
-  document.getElementById('p-pbar').style.width=Math.min(100,((st.pts-prev)/(next-prev))*100)+'%';
-  document.getElementById('p-nxt').textContent=`Próx. nivel: ${fmt(next)} pts`;
-  document.getElementById('p-regen').textContent=`+${regenRate().toFixed(2)}x`;
-
-  Object.keys(SRC_CFG).forEach(k=>{
-    const cfg=SRC_CFG[k], cnt=st.srcs[k], locked=cfg.minPts&&st.pts<cfg.minPts;
-    document.getElementById(`sc-${k}-n`).textContent=
-      k==='hydrogen'&&locked ? 'bloqueado' : (cnt>0?`×${cnt} activos`:'×0');
-    const bon=document.getElementById(`sc-${k}-b`);
-    if(locked){ bon.textContent=`Requiere ${fmt(cfg.minPts)} pts`; bon.style.color='var(--muted)'; }
-    else { bon.textContent=`+${(cnt*cfg.bonus*100).toFixed(0)}% regen activa`; bon.style.color='#1bc78a'; }
-    const btn=document.getElementById(`btn-${k}`);
-    btn.className='bpts'+(locked||st.pts<cfg.cost?' off':'');
-    btn.textContent=locked?'Bloqueado':`+${fmt(cfg.cost)} pts`;
+function uiP() {
+  document.getElementById('p-pts').textContent=fmt(st.pts)+' pts';
+  const lvs=[0,500,1000,2000,3500,5000,8000,12000];
+  let li=0; lvs.forEach((v,i)=>{if(st.pts>=v)li=i});
+  const nx=lvs[li+1]??lvs[lvs.length-1]*2, pv=lvs[li];
+  document.getElementById('p-pb').style.width=Math.min(100,((st.pts-pv)/(nx-pv))*100)+'%';
+  document.getElementById('p-nxt').textContent=`Próx. nivel: ${fmt(nx)} pts`;
+  document.getElementById('p-rg').textContent=`+${regen().toFixed(2)}x`;
+  Object.keys(SC).forEach(k=>{
+    const c=SC[k],cnt=st.srcs[k],lk=c.min&&st.pts<c.min;
+    document.getElementById('n-'+k).textContent=k==='hydrogen'&&lk?'bloqueado':(cnt>0?`×${cnt} activos`:'×0');
+    const be=document.getElementById('b-'+k);
+    if(lk){be.textContent=`Requiere ${fmt(c.min)} pts`;be.style.color='var(--mu)'}
+    else{be.textContent=`+${(cnt*c.b*100).toFixed(0)}% regen activa`;be.style.color='#1bc78a'}
+    const btn=document.getElementById('btn-'+k);
+    btn.className='bpts'+(lk||st.pts<c.cost?' off':'');
+    btn.textContent=lk?'Bloqueado':`+${fmt(c.cost)} pts`;
   });
 }
-
-function uiCharging() {
-  document.getElementById('ch-best').textContent = st.best ? fmtT(st.best) : '2:38';
-  document.getElementById('ch-srcs').textContent = '×'+totalSrcs();
+function uiC() {
+  document.getElementById('ch-best').textContent=st.best?fmtT(st.best):'2:38';
+  document.getElementById('ch-srcs').textContent='×'+totS();
 }
-
-/* ── PURCHASE ── */
-function buySrc(k) {
-  const cfg = SRC_CFG[k];
-  if (cfg.minPts && st.pts < cfg.minPts) { toast(`Necesitas ${fmt(cfg.minPts)} pts`); return; }
-  if (st.pts < cfg.cost) { toast(`Puntos insuficientes`); return; }
-  st.pts -= cfg.cost;
-  st.srcs[k] = (st.srcs[k]||0)+1;
-  saveSt(); uiPlanta();
-  toast(`✓ ${cfg.name} — regen ×${regenRate().toFixed(2)}`);
+function buy(k) {
+  const c=SC[k];
+  if(c.min&&st.pts<c.min){toast(`Necesitas ${fmt(c.min)} pts`);return}
+  if(st.pts<c.cost){toast('Puntos insuficientes');return}
+  st.pts-=c.cost; st.srcs[k]=(st.srcs[k]||0)+1;
+  sv(); uiP(); toast(`✓ ${c.name} — regen ×${regen().toFixed(2)}`);
 }
-
-/* ── TOAST ── */
 let _tt;
-function toast(msg) {
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('on');
-  clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('on'),2600);
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('on'),2600);
 }
 
-/* ═══════════════════════════════════════════════
+/* ══════════════════════════════════════════
    GAME ENGINE
-═══════════════════════════════════════════════ */
-const TOTAL_LAPS = 3;
-const LAP_DIST   = 2400;
-const NLANES     = 3;
+══════════════════════════════════════════ */
+const NL=3, LAPDIST=2800;
+let cv,cx,W,H,DPR,hT,hB,gT,gB,gH;
 
-let canvas, ctx, W, H, DPR;
-let hudTH, hudBH, gTop, gBot, gH;
-
-function horizonY()  { return gTop + gH * 0.38; }
-function roadAt(y) {
-  const hy = horizonY();
-  const t = Math.max(0, (y - hy) / (gBot - hy));
-  const hw = (W * 0.06) + (W * 0.42) * t;
-  return { left: W/2 - hw, right: W/2 + hw, hw };
+// Road geometry
+const hy = () => gT + gH*0.37;
+function road(y) {
+  const t=Math.max(0,(y-hy())/(gB-hy()));
+  const hw=W*0.05+W*0.44*t;
+  return {l:W/2-hw,r:W/2+hw,hw,lw:(hw*2)/NL};
 }
-function laneX(lane, y) {
-  const r = roadAt(y);
-  const lw = (r.right - r.left) / NLANES;
-  return r.left + lw * (lane + 0.5);
+function lx(lane,y){const r=road(y);return r.l+r.lw*(lane+0.5)}
+
+// Precomputed city skyline (stable across frames)
+let skyline=[];
+function mkSkyline(){
+  skyline=[];
+  const n=18;
+  for(let i=0;i<n;i++){
+    const x=(i/n)*W+(Math.random()-0.5)*(W/n*0.5);
+    const h=20+Math.random()*55;
+    const w=12+Math.random()*24;
+    const win=Math.random()<0.6;
+    skyline.push({x,h,w,win,c:Math.random()<0.3?'#047DBA':Math.random()<0.5?'#004656':'#002838'});
+  }
 }
 
 const G = {
-  running: false, raf: null,
-  energy: 100, boost: false,
-  lane: 1, targetLane: 1, visualX: 0,
-  dist: 0, lap: 1, lapDist: 0,
-  sessionPts: 0, orbsGot: 0,
-  t0: 0, elapsed: 0,
-  lapT0: 0, lapTimes: [],
-  orbs: [], foes: [], particles: [],
-  roadLines: [],
-  kerbOffset: 0,
-  bgTrees: [],
+  running:false,raf:null,
+  en:100, boost:false,
+  lane:1,tLane:1,vx:0,tilt:0,tTilt:0,
+  dist:0,lap:1,lapD:0,
+  pts:0,orbs:0,
+  combo:0,comboT:0,comboMax:0,
+  t0:0,el:0,lTimes:[],
+  oo:[],foes:[],parts:[],floats:[],
+  kOff:0,segOff:0,
+  shake:0,sX:0,sY:0,
+  boostFlash:0, collectFlash:0,
+  slAngle:0,
+  _prev:0
 };
 
-function stopGame() {
-  G.running = false;
-  cancelAnimationFrame(G.raf);
-}
+function stopGame(){G.running=false;cancelAnimationFrame(G.raf)}
 
-function startGame() {
+function startGame(){
   showScreen('game');
-
-  const app = document.getElementById('app');
-  const hudT = document.getElementById('ghud-t');
-  const hudB = document.getElementById('ghud-b');
-
-  DPR = window.devicePixelRatio || 1;
-  W = app.clientWidth;
-  H = app.clientHeight;
-
-  canvas = document.getElementById('gc');
-  canvas.width  = W * DPR;
-  canvas.height = H * DPR;
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
-  ctx = canvas.getContext('2d');
-  ctx.scale(DPR, DPR);
-
-  hudTH = hudT.offsetHeight;
-  hudBH = hudB.offsetHeight;
-  gTop  = hudTH;
-  gBot  = H - hudBH;
-  gH    = gBot - gTop;
-
-  Object.assign(G, {
-    running:false, boost:false,
-    energy: Math.min(100, st.energy),
-    lane:1, targetLane:1, visualX: laneX(1, gBot-50),
-    dist:0, lap:1, lapDist:0,
-    sessionPts:0, orbsGot:0,
-    t0:0, elapsed:0, lapT0:0, lapTimes:[],
-    orbs:[], foes:[], particles:[],
-    roadLines:[], kerbOffset:0,
-    bgTrees:[],
+  const app=document.getElementById('app');
+  const ht=document.getElementById('ghudt'), hb=document.getElementById('ghudb');
+  DPR=window.devicePixelRatio||1;
+  W=app.clientWidth; H=app.clientHeight;
+  cv=document.getElementById('gc');
+  cv.width=W*DPR; cv.height=H*DPR;
+  cv.style.width=W+'px'; cv.style.height=H+'px';
+  cx=cv.getContext('2d'); cx.scale(DPR,DPR);
+  hT=ht.offsetHeight; hB=hb.offsetHeight;
+  gT=hT; gB=H-hB; gH=gB-gT;
+  mkSkyline();
+  Object.assign(G,{
+    running:false,boost:false,
+    en:Math.min(100,st.en),
+    lane:1,tLane:1,vx:lx(1,gB-55),tilt:0,tTilt:0,
+    dist:0,lap:1,lapD:0,pts:0,orbs:0,
+    combo:0,comboT:0,comboMax:0,
+    t0:0,el:0,lTimes:[],
+    oo:[],foes:[],parts:[],floats:[],
+    kOff:0,segOff:0,shake:0,sX:0,sY:0,
+    boostFlash:0,collectFlash:0,slAngle:0,_prev:0
   });
-
-  document.getElementById('gover').style.display = 'none';
-
-  for (let i=0; i<10; i++) {
-    G.roadLines.push({ y: gTop + (gH/10) * i, phase: Math.random() });
-  }
-
-  for (let i=0; i<12; i++) {
-    G.bgTrees.push(mkTree(i/12));
-  }
-
-  G.foes = [
-    { lane:0, y: gTop + gH*0.25, speed:0.85, phase:0 },
-    { lane:2, y: gTop + gH*0.15, speed:0.7,  phase:2 },
+  // Seed road lines across multiple rows
+  G._roadDashes=[];
+  for(let i=0;i<16;i++) G._roadDashes.push({y:gT+(gH/16)*i});
+  // Foes
+  G.foes=[
+    {lane:0,y:gT+gH*0.20,chT:200,chI:200},
+    {lane:2,y:gT+gH*0.12,chT:300,chI:300},
   ];
-
-  runCountdown(3, ()=>{
-    G.t0 = performance.now();
-    G.lapT0 = G.t0;
-    G.running = true;
-    G.raf = requestAnimationFrame(gameLoop);
+  document.getElementById('gover').style.display='none';
+  countdown(3,()=>{
+    G.t0=performance.now();G.running=true;
+    G.raf=requestAnimationFrame(loop);
   });
 }
 
-function mkTree(t) {
-  const side = Math.random() < 0.5 ? 'L' : 'R';
-  return { side, t, h: 30+Math.random()*50, color: Math.random()<0.5 ? '#1a4a2a' : '#004656' };
-}
-
-function runCountdown(n, cb) {
-  const el = document.getElementById('cnum');
-  const box = document.getElementById('countdown');
-  box.style.display = 'flex';
-  if (n === 0) {
-    el.textContent = 'GO!';
-    el.style.opacity = 1;
-    setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>{ box.style.display='none'; cb(); },200); },600);
+/* ── COUNTDOWN ── */
+function countdown(n,cb){
+  const box=document.getElementById('cdwn'), el=document.getElementById('cnum');
+  box.style.display='flex';
+  if(n===0){
+    el.textContent='¡GO!'; el.classList.add('show');
+    setTimeout(()=>{el.classList.remove('show');setTimeout(()=>{box.style.display='none';cb()},250)},700);
     return;
   }
-  el.textContent = n;
-  el.style.opacity = 1;
-  setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>runCountdown(n-1,cb),200); },700);
+  el.textContent=n; el.classList.remove('show');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>countdown(n-1,cb),200)},800);
 }
 
-function gameLoop(ts) {
-  if (!G.running) return;
-  const dt = Math.min(32, ts - (G._prev||ts));
-  G._prev = ts;
-  G.elapsed = ts - G.t0;
-  update(dt);
-  render();
-  G.raf = requestAnimationFrame(gameLoop);
+/* ── MAIN LOOP ── */
+function loop(ts){
+  if(!G.running)return;
+  const dt=Math.min(32,ts-(G._prev||ts)); G._prev=ts;
+  G.el=ts-G.t0;
+  update(dt); render();
+  G.raf=requestAnimationFrame(loop);
 }
 
-function update(dt) {
-  const regen = regenRate();
-  const drain = G.boost ? 1.8 : 0.18;
-  const rep   = 0.05 * regen;
-  G.energy = Math.max(0, Math.min(100, G.energy - drain + rep));
-  if (G.energy < 2) G.boost = false;
-  st.energy = G.energy;
+/* ── UPDATE ── */
+function update(dt){
+  const rg=regen();
+  // energy
+  const drain=G.boost?1.6:0.15, rep=0.048*rg;
+  G.en=Math.max(0,Math.min(100,G.en-drain+rep));
+  if(G.en<2)G.boost=false;
+  st.en=G.en;
 
-  const spd = (3 + (G.energy/100)*3.5) * (G.boost ? 2.0 : 1) * (dt/16.67);
+  // speed (px/frame at 60fps base)
+  const baseSpd=4+(G.en/100)*3.5;
+  const spd=baseSpd*(G.boost?2.2:1)*(dt/16.67);
+  const kmh=Math.round(baseSpd*(G.boost?2.2:1)*18);
 
-  G.dist += spd;
-  G.lapDist += spd;
-  G.kerbOffset = (G.kerbOffset + spd) % 32;
+  // distance & lap
+  G.dist+=spd; G.lapD+=spd; G.kOff=(G.kOff+spd)%36; G.segOff=(G.segOff+spd)%80;
 
-  const tx = laneX(G.targetLane, gBot-50);
-  G.visualX += (tx - G.visualX) * Math.min(1, dt * 0.012);
-
-  if (G.lapDist >= LAP_DIST) {
-    G.lapDist -= LAP_DIST;
-    const lapMs = G.elapsed - (G.lapTimes.reduce((a,b)=>a+b,0));
-    G.lapTimes.push(lapMs);
-    if (G.lap >= TOTAL_LAPS) { endGame(); return; }
+  if(G.lapD>=LAPDIST){
+    G.lapD-=LAPDIST;
+    const lt=G.el-(G.lTimes.reduce((a,b)=>a+b,0));
+    G.lTimes.push(lt);
+    if(G.lap>=3){endGame();return}
     G.lap++;
     toast(`¡Vuelta ${G.lap}! 🏁`);
   }
 
-  G.roadLines.forEach(l => {
-    l.y += spd * 1.1;
-    if (l.y > gBot + 20) l.y = horizonY() + 4;
-  });
+  // lane lerp
+  const tx=lx(G.tLane,gB-55);
+  G.vx+=(tx-G.vx)*Math.min(1,dt*0.014);
 
-  G.bgTrees.forEach(tr => {
-    tr.t += spd * 0.0006;
-    if (tr.t > 1) tr.t -= 1;
-  });
+  // car tilt spring
+  G.tTilt=(G.tLane-G.lane)*0.38;
+  G.tilt+=(G.tTilt-G.tilt)*0.1;
 
-  if (Math.random() < 0.018 * (dt/16.67) && G.orbs.length < 7) {
-    const lane = Math.floor(Math.random()*NLANES);
-    const hy = horizonY();
-    G.orbs.push({ lane, y: hy+8, collected:false, pulse:Math.random()*Math.PI*2 });
+  // combo decay
+  if(G.comboT>0){G.comboT-=dt}else G.combo=0;
+
+  // scroll road dashes
+  G._roadDashes.forEach(d=>{d.y+=spd*1.1;if(d.y>gB+20)d.y=hy()+2});
+
+  // spawn orbs with rhythm
+  if(Math.random()<0.022*(dt/16.67)&&G.oo.length<8){
+    const ol=Math.floor(Math.random()*NL);
+    G.oo.push({lane:ol,y:hy()+6,pu:Math.random()*Math.PI*2,big:Math.random()<0.15});
   }
+  G.oo.forEach(o=>{o.y+=spd*1.12;o.pu+=0.08});
 
-  G.orbs.forEach(o => { o.y += spd * 1.08; o.pulse += 0.1; });
-
-  const py = gBot - 50;
-  G.orbs = G.orbs.filter(o => {
-    if (o.collected || o.y > gBot+30) return false;
-    const ox = laneX(o.lane, o.y);
-    const threshold = 40 + (o.y - horizonY()) / (gBot - horizonY()) * 20;
-    const dx = Math.abs(ox - G.visualX);
-    const dy = Math.abs(o.y - py);
-    if (dx < threshold && dy < threshold*0.8 && o.lane === G.targetLane) {
-      G.energy = Math.min(100, G.energy+14);
-      G.sessionPts += 8;
-      G.orbsGot++;
-      for (let i=0;i<8;i++) G.particles.push({
-        x:ox, y:o.y,
-        vx:(Math.random()-.5)*5, vy:(Math.random()-1.4)*5,
-        life:1, r:5
+  // collect
+  const py=gB-55;
+  G.oo=G.oo.filter(o=>{
+    if(o.y>gB+30)return false;
+    const ox=lx(o.lane,o.y);
+    const sc=psc(o.y);
+    const th=46*sc;
+    if(Math.abs(ox-G.vx)<th&&Math.abs(o.y-py)<th&&o.lane===G.tLane){
+      G.combo++;G.comboT=120*(dt||16);
+      G.comboMax=Math.max(G.comboMax,G.combo);
+      const mult=Math.max(1,Math.floor(G.combo/3));
+      const gain=o.big?20*mult:8*mult;
+      G.en=Math.min(100,G.en+(o.big?18:12));
+      G.pts+=gain; G.orbs++;
+      G.collectFlash=12;
+      // particles
+      for(let i=0;i<10;i++) G.parts.push({
+        x:ox,y:o.y,vx:(Math.random()-.5)*6,vy:(Math.random()-1.6)*6,
+        life:1,r:o.big?7:4,c:'#90FFBB'
       });
+      // floating text
+      G.floats.push({x:ox,y:o.y-10,t:`+${gain}`,life:1,vy:-1.8,
+        big:o.big,col:mult>1?'#E0FF48':'#90FFBB'});
       return false;
     }
     return true;
   });
 
-  G.sessionPts += spd * 0.016;
+  G.pts+=spd*0.014;
 
-  G.particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.15; p.life-=0.05; });
-  G.particles = G.particles.filter(p=>p.life>0);
+  // particles
+  G.parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.18;p.life-=0.045});
+  G.parts=G.parts.filter(p=>p.life>0);
 
-  G.foes.forEach((f,i)=>{
-    f.phase += dt*0.0015;
-    f.y = gTop + gH * (0.18 + i*0.12);
+  // float texts
+  G.floats.forEach(f=>{f.y+=f.vy;f.life-=0.022});
+  G.floats=G.floats.filter(f=>f.life>0);
+
+  // foes lane AI
+  G.foes.forEach(f=>{
+    f.chT-=dt;
+    if(f.chT<=0){f.lane=Math.floor(Math.random()*NL);f.chT=f.chI+Math.random()*300}
+    f.y=gT+gH*(G.foes.indexOf(f)===0?0.20:0.11);
   });
 
-  document.getElementById('g-pos').textContent   = '2°';
-  document.getElementById('g-lap').textContent   = `${G.lap}/${TOTAL_LAPS}`;
-  document.getElementById('g-time').textContent  = fmtT(G.elapsed);
-  document.getElementById('g-score').textContent = Math.round(G.sessionPts);
-  document.getElementById('g-ebar').style.width  = G.energy+'%';
-  document.getElementById('g-epct').textContent  = Math.round(G.energy)+'%';
+  // effects
+  if(G.shake>0.3){
+    G.sX=(Math.random()-.5)*G.shake;G.sY=(Math.random()-.5)*G.shake;G.shake*=0.78;
+  }else{G.sX=0;G.sY=0}
+  if(G.boostFlash>0)G.boostFlash--;
+  if(G.collectFlash>0)G.collectFlash--;
+  G.slAngle+=G.boost?0.04:0.015;
 
-  const bb = document.getElementById('b-B');
-  if (G.energy<3) { bb.classList.add('off'); bb.classList.remove('on'); }
-  else { bb.classList.remove('off'); bb.classList.toggle('on', G.boost); }
+  // HUD
+  document.getElementById('g-pos').textContent='2°';
+  document.getElementById('g-lap').textContent=`${G.lap} / 3`;
+  document.getElementById('g-time').textContent=fmtT(G.el);
+  document.getElementById('g-score').textContent=fmt(Math.round(G.pts));
+  document.getElementById('g-eb').style.width=G.en+'%';
+  document.getElementById('g-spd').textContent=`${kmh} km/h`;
+  // boost button
+  const bb=document.getElementById('bB');
+  if(G.en<3){bb.classList.add('off');bb.classList.remove('on')}
+  else{bb.classList.remove('off');bb.classList.toggle('on',G.boost)}
 }
 
-function render() {
-  ctx.clearRect(0,0,W,H);
+/* ── PERSPECTIVE SCALE ── */
+function psc(y){return Math.max(0,Math.min(1,(y-hy())/(gB-hy())))*0.8+0.2}
 
-  const hy = horizonY();
+/* ── RENDER ── */
+function render(){
+  cx.save();
+  if(G.shake>0.3) cx.translate(G.sX,G.sY);
 
-  const sky = ctx.createLinearGradient(0, gTop, 0, hy);
-  sky.addColorStop(0, '#001f2e');
-  sky.addColorStop(0.5, '#004656');
-  sky.addColorStop(1, '#047DBA');
-  ctx.fillStyle = sky;
-  ctx.fillRect(0, gTop, W, hy - gTop);
+  cx.clearRect(-20,-20,W+40,H+40);
 
-  const glow = ctx.createLinearGradient(0, hy-20, 0, hy+20);
-  glow.addColorStop(0,'rgba(144,255,187,0)');
-  glow.addColorStop(.5,'rgba(144,255,187,0.12)');
-  glow.addColorStop(1,'rgba(144,255,187,0)');
-  ctx.fillStyle = glow;
-  ctx.fillRect(0, hy-20, W, 40);
+  const HY=hy();
 
-  drawBgDecor(hy);
+  // ── SKY ──
+  const sk=cx.createLinearGradient(0,gT,0,HY);
+  sk.addColorStop(0,'#000814');
+  sk.addColorStop(0.5,'#001f3f');
+  sk.addColorStop(1,'#0a3d62');
+  cx.fillStyle=sk; cx.fillRect(0,gT,W,HY-gT);
 
-  const ground = ctx.createLinearGradient(0, hy, 0, gBot);
-  ground.addColorStop(0, '#143520');
-  ground.addColorStop(1, '#0a2010');
-  ctx.fillStyle = ground;
-  ctx.fillRect(0, hy, W, gBot-hy);
+  // Star field
+  drawStars(HY);
 
-  drawRoad(hy);
-  drawLaneLines(hy);
-  drawOrbs(hy);
-  drawParticles();
+  // Horizon glow
+  const hg=cx.createLinearGradient(0,HY-30,0,HY+15);
+  hg.addColorStop(0,'rgba(27,199,138,0)');
+  hg.addColorStop(0.6,'rgba(27,199,138,0.18)');
+  hg.addColorStop(1,'rgba(27,199,138,0)');
+  cx.fillStyle=hg; cx.fillRect(0,HY-30,W,45);
 
-  G.foes.forEach(f => {
-    const fx = laneX(f.lane, f.y);
-    const sc = perspScale(f.y, hy);
-    drawCar(fx, f.y, '#F3BDFF', sc, false);
+  // Skyline
+  drawSkyline(HY);
+
+  // ── GROUND ──
+  const gr=cx.createLinearGradient(0,HY,0,gB);
+  gr.addColorStop(0,'#0f2d1a'); gr.addColorStop(1,'#081508');
+  cx.fillStyle=gr; cx.fillRect(0,HY,W,gB-HY);
+
+  // Road segments (alternating to show speed)
+  drawRoadSurface(HY);
+
+  // Lane highlight (target lane)
+  drawLaneHL(HY);
+
+  // Kerb
+  drawKerb(HY,true); drawKerb(HY,false);
+
+  // Lane dashes
+  drawLaneDashes(HY);
+
+  // Orbs (back to front)
+  [...G.oo].sort((a,b)=>a.y-b.y).forEach(o=>drawOrb(o,HY));
+
+  // Particles
+  G.parts.forEach(p=>{
+    cx.globalAlpha=p.life;
+    cx.fillStyle=p.c;
+    cx.shadowColor=p.c; cx.shadowBlur=10;
+    cx.beginPath(); cx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2); cx.fill();
+    cx.shadowBlur=0;
+  });
+  cx.globalAlpha=1;
+
+  // Foes
+  G.foes.forEach(f=>{
+    const fx=lx(f.lane,f.y), sc=psc(f.y);
+    drawCar(fx,f.y,'#F3BDFF',sc,false,0);
   });
 
-  if (G.boost && G.energy>3) drawBoostTrail();
-  drawCar(G.visualX, gBot-50, '#E0FF48', 1, true);
+  // Boost trail
+  if(G.boost&&G.en>3) drawTrail();
 
-  const lapPct = G.lapDist / LAP_DIST;
-  ctx.fillStyle = 'rgba(0,0,0,0.4)';
-  ctx.fillRect(0, gTop, W, 4);
-  const lpg = ctx.createLinearGradient(0,0,W*lapPct,0);
+  // Speed lines (boost)
+  if(G.boost) drawSpeedLines(HY);
+
+  // Player car
+  drawCar(G.vx,gB-55,'#E0FF48',1,true,G.tilt);
+
+  // Collect flash
+  if(G.collectFlash>0){
+    cx.fillStyle=`rgba(144,255,187,${G.collectFlash/12*0.18})`;
+    cx.fillRect(0,gT,W,gB-gT);
+  }
+
+  // Boost flash
+  if(G.boostFlash>0){
+    cx.fillStyle=`rgba(224,255,72,${G.boostFlash/15*0.15})`;
+    cx.fillRect(0,gT,W,gB-gT);
+  }
+
+  // Floating texts
+  cx.textAlign='center'; cx.textBaseline='middle';
+  G.floats.forEach(f=>{
+    cx.globalAlpha=f.life;
+    cx.fillStyle=f.col;
+    cx.shadowColor=f.col; cx.shadowBlur=12;
+    cx.font=`900 ${f.big?22:16}px Nunito,sans-serif`;
+    cx.fillText(f.t,f.x,f.y);
+    cx.shadowBlur=0;
+  });
+  cx.globalAlpha=1;
+
+  // Combo display
+  if(G.combo>=2){
+    const cy2=gT+20;
+    cx.textAlign='right'; cx.textBaseline='middle';
+    cx.font='900 14px Nunito,sans-serif';
+    const mul=Math.max(1,Math.floor(G.combo/3));
+    cx.fillStyle='rgba(0,0,0,.5)';
+    cx.beginPath(); cx.roundRect(W-84,cy2-14,80,28,8); cx.fill();
+    cx.fillStyle='#E0FF48';
+    cx.fillText(`×${mul} COMBO`,W-10,cy2);
+    cx.fillStyle='rgba(255,255,255,.6)';
+    cx.font='700 10px Nunito,sans-serif';
+    cx.fillText(`${G.combo} seguidos`,W-10,cy2+14);
+  }
+
+  // Lap progress bar
+  const lp=G.lapD/LAPDIST;
+  cx.fillStyle='rgba(0,0,0,.5)'; cx.fillRect(0,gT,W,5);
+  const lpg=cx.createLinearGradient(0,0,W*lp,0);
   lpg.addColorStop(0,'#90FFBB'); lpg.addColorStop(1,'#1bc78a');
-  ctx.fillStyle = lpg;
-  ctx.fillRect(0, gTop, W*lapPct, 4);
+  cx.fillStyle=lpg; cx.fillRect(0,gT,W*lp,5);
+  // Glow on progress bar
+  if(lp>0.01){
+    cx.shadowColor='#90FFBB'; cx.shadowBlur=8;
+    cx.fillRect(W*lp-3,gT,3,5); cx.shadowBlur=0;
+  }
 
-  ctx.fillStyle='#000';
-  ctx.fillRect(0,0,W,gTop);
-  ctx.fillRect(0,gBot,W,H-gBot);
+  // Mask (black bars over HUD areas)
+  cx.fillStyle='#000820';
+  cx.fillRect(0,0,W,gT);
+  cx.fillRect(0,gB,W,H-gB);
+
+  cx.restore();
 }
 
-function perspScale(y, hy) {
-  const t = Math.max(0, (y - hy) / (gBot - hy));
-  return 0.22 + t * 0.78;
-}
-
-function drawRoad(hy) {
-  const rtop = roadAt(hy);
-  const rbot = roadAt(gBot);
-  ctx.beginPath();
-  ctx.moveTo(rtop.left, hy);
-  ctx.lineTo(rtop.right, hy);
-  ctx.lineTo(rbot.right, gBot);
-  ctx.lineTo(rbot.left, gBot);
-  ctx.closePath();
-  const rg = ctx.createLinearGradient(0, hy, 0, gBot);
-  rg.addColorStop(0,'#222222'); rg.addColorStop(1,'#181818');
-  ctx.fillStyle = rg;
-  ctx.fill();
-
-  drawKerb(rbot.left, hy, true);
-  drawKerb(rbot.right, hy, false);
-}
-
-function drawKerb(bx, hy, isLeft) {
-  const stripeH = 18;
-  const nStripes = Math.ceil((gBot - hy) / stripeH) + 2;
-  for (let i=0; i<nStripes; i++) {
-    const y1 = hy + (i-1)*stripeH - G.kerbOffset%stripeH;
-    const y2 = y1 + stripeH;
-    const t1 = Math.max(0, (y1-hy)/(gBot-hy));
-    const t2 = Math.max(0, (y2-hy)/(gBot-hy));
-    const r1 = roadAt(hy + t1*(gBot-hy));
-    const r2 = roadAt(hy + t2*(gBot-hy));
-    const kw1 = r1.hw * 0.06, kw2 = r2.hw * 0.06;
-    const color = i%2===0 ? '#cc2222' : '#ffffff';
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    if (isLeft) {
-      ctx.moveTo(r1.left, hy+t1*(gBot-hy));
-      ctx.lineTo(r1.left+kw1, hy+t1*(gBot-hy));
-      ctx.lineTo(r2.left+kw2, hy+t2*(gBot-hy));
-      ctx.lineTo(r2.left, hy+t2*(gBot-hy));
-    } else {
-      ctx.moveTo(r1.right, hy+t1*(gBot-hy));
-      ctx.lineTo(r1.right-kw1, hy+t1*(gBot-hy));
-      ctx.lineTo(r2.right-kw2, hy+t2*(gBot-hy));
-      ctx.lineTo(r2.right, hy+t2*(gBot-hy));
-    }
-    ctx.closePath();
-    ctx.fill();
+/* ── STARS ── */
+function drawStars(HY) {
+  // Use seeded-like stable positions via sin
+  cx.fillStyle='rgba(255,255,255,0.6)';
+  for(let i=0;i<40;i++){
+    const sx=((Math.sin(i*137.508)*0.5+0.5)*W)|0;
+    const sy=(gT+((Math.sin(i*73.1)*0.5+0.5)*(HY-gT-10))|0);
+    const r=Math.sin(i*0.7+G.el*0.001)*0.5+0.8;
+    cx.beginPath(); cx.arc(sx,sy,r,0,Math.PI*2); cx.fill();
   }
 }
 
-function drawLaneLines(hy) {
-  for (let d=1; d<NLANES; d++) {
-    G.roadLines.forEach(l => {
-      if (l.y < hy+2 || l.y > gBot-5) return;
-      const r = roadAt(l.y);
-      const xMid = r.left + (r.right-r.left) * (d/NLANES);
-      const t = (l.y-hy)/(gBot-hy);
-      const dh = 14 * t + 3;
-      const dw = Math.max(1, 2*t);
-      ctx.fillStyle = 'rgba(255,255,255,0.35)';
-      ctx.fillRect(xMid - dw/2, l.y, dw, dh);
+/* ── SKYLINE ── */
+function drawSkyline(HY) {
+  skyline.forEach(b=>{
+    cx.fillStyle=b.c;
+    cx.globalAlpha=0.85;
+    cx.fillRect(b.x-b.w/2,HY-b.h,b.w,b.h);
+    if(b.win){
+      cx.fillStyle='rgba(224,255,72,0.3)';
+      const cols=Math.floor(b.w/7), rows=Math.floor(b.h/9);
+      for(let r=0;r<rows;r++) for(let c=0;c<cols;c++)
+        if((r+c)%2===0) cx.fillRect(b.x-b.w/2+c*7+2,HY-b.h+r*9+2,4,5);
+    }
+    cx.globalAlpha=1;
+  });
+  // moeve billboard
+  const bx=W*0.18, by=HY-34;
+  cx.fillStyle='#E0FF48';
+  cx.shadowColor='#E0FF48'; cx.shadowBlur=12;
+  cx.beginPath(); cx.roundRect(bx-32,by-10,64,22,4); cx.fill();
+  cx.shadowBlur=0;
+  cx.fillStyle='#004656';
+  cx.font='bold 13px Nunito,sans-serif'; cx.textAlign='center'; cx.textBaseline='middle';
+  cx.fillText('moeve',bx,by+1);
+}
+
+/* ── ROAD SURFACE with alternating segments ── */
+function drawRoadSurface(HY) {
+  const rt=road(HY), rb=road(gB);
+  // Main road
+  cx.beginPath();
+  cx.moveTo(rt.l,HY); cx.lineTo(rt.r,HY);
+  cx.lineTo(rb.r,gB); cx.lineTo(rb.l,gB); cx.closePath();
+  const rg=cx.createLinearGradient(0,HY,0,gB);
+  rg.addColorStop(0,'#0d0d1a'); rg.addColorStop(1,'#1a1a2e');
+  cx.fillStyle=rg; cx.fill();
+
+  // Alternating road bands (speed feel)
+  const BAND=80;
+  const nbands=Math.ceil((gB-HY)/BAND)+2;
+  for(let i=0;i<nbands;i++){
+    const y1=gB-(i*BAND)+(G.segOff%BAND);
+    const y2=y1-BAND*0.5;
+    if(y1<HY||y2>gB) continue;
+    const yc1=Math.max(HY,Math.min(gB,y2));
+    const yc2=Math.max(HY,Math.min(gB,y1));
+    if(yc2-yc1<1) continue;
+    const t1=(yc1-HY)/(gB-HY), t2=(yc2-HY)/(gB-HY);
+    const r1=road(yc1), r2=road(yc2);
+    cx.beginPath();
+    cx.moveTo(r1.l,yc1); cx.lineTo(r1.r,yc1);
+    cx.lineTo(r2.r,yc2); cx.lineTo(r2.l,yc2); cx.closePath();
+    cx.fillStyle=i%2===0?'rgba(255,255,255,0.025)':'rgba(0,0,0,0.04)';
+    cx.fill();
+  }
+}
+
+/* ── LANE HIGHLIGHT ── */
+function drawLaneHL(HY) {
+  const lane=G.tLane;
+  cx.beginPath();
+  const steps=12;
+  for(let i=0;i<=steps;i++){
+    const y=HY+(gB-HY)*(i/steps);
+    const r=road(y);
+    const lx1=r.l+r.lw*lane;
+    if(i===0) cx.moveTo(lx1,y);
+    else cx.lineTo(lx1,y);
+  }
+  for(let i=steps;i>=0;i--){
+    const y=HY+(gB-HY)*(i/steps);
+    const r=road(y);
+    cx.lineTo(r.l+r.lw*(lane+1),y);
+  }
+  cx.closePath();
+  const g=cx.createLinearGradient(0,HY,0,gB);
+  g.addColorStop(0,'rgba(224,255,72,0)');
+  g.addColorStop(0.5,'rgba(224,255,72,0.05)');
+  g.addColorStop(1,'rgba(224,255,72,0.14)');
+  cx.fillStyle=g; cx.fill();
+
+  // Animated leading edge
+  const lep=((G.el*0.0006)%1);
+  const ley=HY+(gB-HY)*lep;
+  const rle=road(ley);
+  const lx1=rle.l+rle.lw*lane, lx2=rle.l+rle.lw*(lane+1);
+  cx.strokeStyle='rgba(224,255,72,0.4)';
+  cx.lineWidth=1.5; cx.setLineDash([8,6]);
+  cx.beginPath(); cx.moveTo(lx1,ley); cx.lineTo(lx2,ley); cx.stroke();
+  cx.setLineDash([]);
+}
+
+/* ── KERB ── */
+function drawKerb(HY,left){
+  const n=Math.ceil((gB-HY)/36)+2;
+  for(let i=0;i<n;i++){
+    const y1=HY+(i-1)*36-(G.kOff%36), y2=y1+36;
+    if(y2<HY||y1>gB) continue;
+    const ya=Math.max(HY,y1), yb=Math.min(gB,y2);
+    const t1=(ya-HY)/(gB-HY), t2=(yb-HY)/(gB-HY);
+    const r1=road(ya), r2=road(yb);
+    const kw1=r1.hw*0.065, kw2=r2.hw*0.065;
+    cx.fillStyle=i%2===0?'#dd2222':'#ffffff';
+    cx.beginPath();
+    if(left){
+      cx.moveTo(r1.l,ya); cx.lineTo(r1.l+kw1,ya);
+      cx.lineTo(r2.l+kw2,yb); cx.lineTo(r2.l,yb);
+    } else {
+      cx.moveTo(r1.r,ya); cx.lineTo(r1.r-kw1,ya);
+      cx.lineTo(r2.r-kw2,yb); cx.lineTo(r2.r,yb);
+    }
+    cx.closePath(); cx.fill();
+  }
+}
+
+/* ── LANE DASHES ── */
+function drawLaneDashes(HY){
+  for(let d=1;d<NL;d++){
+    G._roadDashes.forEach(dash=>{
+      if(dash.y<HY+2||dash.y>gB-4) return;
+      const r=road(dash.y);
+      const mx=r.l+r.lw*d;
+      const t=(dash.y-HY)/(gB-HY);
+      const dh=Math.max(3,16*t), dw=Math.max(1,3*t);
+      cx.fillStyle=`rgba(255,255,255,${0.2+t*0.3})`;
+      cx.fillRect(mx-dw/2,dash.y,dw,dh);
     });
   }
 }
 
-function drawBgDecor(hy) {
-  const signY = gTop + (hy-gTop)*0.55;
-  const signX = W*0.14;
-  ctx.save();
-  ctx.fillStyle = '#E0FF48';
-  ctx.shadowColor = '#E0FF48'; ctx.shadowBlur = 8;
-  ctx.fillRect(signX-30, signY-10, 60, 20);
-  ctx.shadowBlur = 0;
-  ctx.fillStyle = '#004656';
-  ctx.font = 'bold 12px Nunito,sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('moeve', signX, signY);
-  ctx.restore();
+/* ── ORB ── */
+function drawOrb(o,HY){
+  if(o.y<HY+2||o.y>gB+12) return;
+  const ox=lx(o.lane,o.y);
+  const sc=psc(o.y);
+  const base=o.big?15:10;
+  const r=(base+3*Math.sin(o.pu))*sc;
+  // outer glow
+  const g2=cx.createRadialGradient(ox,o.y,0,ox,o.y,r*3.2);
+  g2.addColorStop(0,'rgba(144,255,187,0.5)');
+  g2.addColorStop(1,'rgba(144,255,187,0)');
+  cx.fillStyle=g2; cx.beginPath(); cx.arc(ox,o.y,r*3.2,0,Math.PI*2); cx.fill();
+  // core
+  cx.fillStyle=o.big?'#E0FF48':'#90FFBB';
+  cx.shadowColor=o.big?'#E0FF48':'#90FFBB'; cx.shadowBlur=18*sc;
+  cx.beginPath(); cx.arc(ox,o.y,r,0,Math.PI*2); cx.fill();
+  cx.shadowBlur=0;
+  // highlight
+  cx.fillStyle='rgba(255,255,255,0.7)';
+  cx.beginPath(); cx.arc(ox-r*.32,o.y-r*.32,r*.32,0,Math.PI*2); cx.fill();
+  // big orb label
+  if(o.big&&sc>0.5){
+    cx.textAlign='center'; cx.textBaseline='middle';
+    cx.fillStyle='#004656'; cx.font=`900 ${Math.round(8*sc)}px Nunito,sans-serif`;
+    cx.fillText('×2',ox,o.y);
+  }
+}
 
-  G.bgTrees.forEach(tr => {
-    const sc = 0.4 + tr.t * 0.6;
-    const bh = tr.h * sc;
-    const r = roadAt(hy);
-    let bx;
-    if (tr.side==='L') bx = r.left * (0.1 + tr.t * 0.8);
-    else               bx = r.right + (W-r.right)*(0.1+tr.t*0.7);
-    const bw = (16+Math.sin(tr.t*17)*8)*sc;
-    ctx.fillStyle = tr.color;
-    ctx.globalAlpha = 0.7 + tr.t*0.3;
-    ctx.fillRect(bx-bw/2, hy-bh, bw, bh);
-    ctx.fillStyle = '#E0FF4840';
-    for (let r2=0;r2<Math.floor(bh/10);r2++) {
-      for (let c=0;c<Math.floor(bw/8);c++) {
-        if ((r2+c)%2===0) ctx.fillRect(bx-bw/2+c*8+2, hy-bh+r2*10+2, 4, 6);
-      }
+/* ── TRAIL ── */
+function drawTrail(){
+  const bx=G.vx, by=gB-55;
+  for(let i=0;i<8;i++){
+    const a=(0.45-i*0.05)*(G.en/100);
+    cx.fillStyle=`rgba(224,255,72,${a})`;
+    cx.beginPath(); cx.ellipse(bx,by+30+i*13,12-i,15-i*1.5,0,0,Math.PI*2); cx.fill();
+  }
+}
+
+/* ── SPEED LINES ── */
+function drawSpeedLines(HY){
+  const ccx=W/2, ccy=gT+gH*0.55;
+  const n=14;
+  cx.save();
+  for(let i=0;i<n;i++){
+    const ang=G.slAngle+(i/n)*Math.PI*2;
+    const r1=gH*0.18, r2=r1+50+Math.sin(i*2.3)*30;
+    const a=0.25*(G.en/100)*(G.boost?1:0.3);
+    cx.strokeStyle=`rgba(224,255,72,${a})`;
+    cx.lineWidth=Math.random()<0.3?2:1;
+    cx.beginPath();
+    cx.moveTo(ccx+Math.cos(ang)*r1,ccy+Math.sin(ang)*r1);
+    cx.lineTo(ccx+Math.cos(ang)*r2,ccy+Math.sin(ang)*r2);
+    cx.stroke();
+  }
+  cx.restore();
+}
+
+/* ── CAR ── */
+function drawCar(x,y,color,sc,isP,tilt){
+  cx.save();
+  cx.translate(x,y); cx.scale(sc,sc); cx.rotate(tilt);
+
+  // shadow
+  cx.fillStyle='rgba(0,0,0,0.4)';
+  cx.beginPath(); cx.ellipse(0,28,22*sc,7*sc,0,0,Math.PI*2); cx.fill();
+
+  // glow aura (player only)
+  if(isP){
+    const ag=cx.createRadialGradient(0,0,8,0,0,36);
+    ag.addColorStop(0,`${color}33`); ag.addColorStop(1,'transparent');
+    cx.fillStyle=ag; cx.beginPath(); cx.arc(0,0,36,0,Math.PI*2); cx.fill();
+  }
+
+  // body
+  cx.fillStyle=color;
+  cx.shadowColor=isP?(G.boost?color:'transparent'):'transparent';
+  cx.shadowBlur=isP&&G.boost?24:0;
+  cx.beginPath(); cx.roundRect(-17,-20,34,42,9); cx.fill(); cx.shadowBlur=0;
+
+  // hood/front
+  cx.fillStyle=isP?'#c8df00':'#d0a0e8';
+  cx.beginPath(); cx.roundRect(-13,-31,26,16,6); cx.fill();
+
+  // windshield
+  cx.fillStyle='rgba(0,40,60,0.7)';
+  cx.beginPath(); cx.roundRect(-10,-29,20,13,4); cx.fill();
+  // windshield glare
+  cx.fillStyle='rgba(255,255,255,0.12)';
+  cx.beginPath(); cx.roundRect(-9,-28,8,5,2); cx.fill();
+
+  // side windows
+  cx.fillStyle='rgba(0,40,60,0.5)';
+  cx.fillRect(-17,-10,4,12); cx.fillRect(13,-10,4,12);
+
+  // spoiler
+  cx.fillStyle=isP?'#a8c800':'#b888d0';
+  cx.fillRect(-18,18,36,5); cx.fillRect(-22,19,6,3); cx.fillRect(16,19,6,3);
+
+  // racing stripe
+  cx.fillStyle=isP?'rgba(0,70,86,0.3)':'rgba(255,255,255,0.15)';
+  cx.fillRect(-3,-30,6,60);
+
+  // wheels
+  [[-18,-12],[18,-12],[-18,16],[18,16]].forEach(([wx,wy])=>{
+    cx.fillStyle='#111';
+    cx.beginPath(); cx.ellipse(wx,wy,8,6,0,0,Math.PI*2); cx.fill();
+    cx.fillStyle='#3a3a3a';
+    cx.beginPath(); cx.ellipse(wx,wy,5,4,0,0,Math.PI*2); cx.fill();
+    cx.fillStyle='#888';
+    cx.beginPath(); cx.arc(wx,wy,2.5,0,Math.PI*2); cx.fill();
+  });
+
+  // lights
+  if(isP){
+    cx.fillStyle='#ff3322'; cx.shadowColor='#ff3322'; cx.shadowBlur=10;
+    cx.fillRect(-14,20,9,4); cx.fillRect(5,20,9,4); cx.shadowBlur=0;
+    if(G.boost){
+      cx.fillStyle='rgba(255,100,0,0.8)';
+      cx.fillRect(-12,22,6,3); cx.fillRect(6,22,6,3);
     }
-    ctx.globalAlpha = 1;
-  });
-}
-
-function drawOrbs(hy) {
-  G.orbs.forEach(o => {
-    if (o.y < hy+4 || o.y > gBot+10) return;
-    const ox = laneX(o.lane, o.y);
-    const sc = perspScale(o.y, hy);
-    const r = (10 + 4*Math.sin(o.pulse)) * sc;
-    const g2 = ctx.createRadialGradient(ox, o.y, 0, ox, o.y, r*2.8);
-    g2.addColorStop(0,'rgba(144,255,187,0.7)');
-    g2.addColorStop(1,'rgba(144,255,187,0)');
-    ctx.fillStyle = g2;
-    ctx.beginPath(); ctx.arc(ox,o.y,r*2.8,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#90FFBB';
-    ctx.shadowColor='#90FFBB'; ctx.shadowBlur=12*sc;
-    ctx.beginPath(); ctx.arc(ox,o.y,r,0,Math.PI*2); ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.beginPath(); ctx.arc(ox-r*0.3, o.y-r*0.3, r*0.3, 0, Math.PI*2); ctx.fill();
-  });
-}
-
-function drawParticles() {
-  G.particles.forEach(p => {
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = '#90FFBB';
-    ctx.shadowColor='#90FFBB'; ctx.shadowBlur=8;
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2); ctx.fill();
-    ctx.shadowBlur=0;
-  });
-  ctx.globalAlpha=1;
-}
-
-function drawBoostTrail() {
-  const cx = G.visualX;
-  const by = gBot - 50;
-  for (let i=0; i<6; i++) {
-    const a = (0.4 - i*0.06) * (G.energy/100);
-    const yw = by + 28 + i*14;
-    ctx.fillStyle = `rgba(224,255,72,${a})`;
-    ctx.beginPath();
-    ctx.ellipse(cx, yw, 14-i, 18-i*2, 0, 0, Math.PI*2);
-    ctx.fill();
-  }
-}
-
-function drawCar(x, y, color, sc, isPlayer) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.scale(sc, sc);
-
-  ctx.fillStyle = 'rgba(0,0,0,0.35)';
-  ctx.beginPath();
-  ctx.ellipse(0, 26, 20, 7, 0, 0, Math.PI*2);
-  ctx.fill();
-
-  ctx.fillStyle = color;
-  ctx.shadowColor = isPlayer ? '#E0FF4899' : 'transparent';
-  ctx.shadowBlur = isPlayer ? 16 : 0;
-  ctx.beginPath();
-  ctx.roundRect(-16,-18,32,38,8);
-  ctx.fill();
-  ctx.shadowBlur = 0;
-
-  ctx.fillStyle = isPlayer ? '#c8e600' : '#d8a8f0';
-  ctx.beginPath();
-  ctx.roundRect(-12,-28,24,14,5);
-  ctx.fill();
-
-  ctx.fillStyle = 'rgba(0,50,70,0.65)';
-  ctx.beginPath();
-  ctx.roundRect(-9,-26,18,11,4);
-  ctx.fill();
-
-  ctx.fillStyle = isPlayer ? '#aacc00' : '#c090e0';
-  ctx.fillRect(-14, 16, 28, 5);
-  ctx.fillRect(-18, 17, 6, 3);
-  ctx.fillRect(12, 17, 6, 3);
-
-  const wclr = '#1a1a1a', wrclr = '#555';
-  [[-18,-10],[18,-10],[-18,14],[18,14]].forEach(([wx,wy])=>{
-    ctx.fillStyle=wclr;
-    ctx.beginPath(); ctx.ellipse(wx,wy,7,5,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=wrclr;
-    ctx.beginPath(); ctx.arc(wx,wy,3,0,Math.PI*2); ctx.fill();
-  });
-
-  if (isPlayer) {
-    ctx.fillStyle = '#ff4444';
-    ctx.shadowColor='#ff4444'; ctx.shadowBlur=8;
-    ctx.fillRect(-13,16,8,4);
-    ctx.fillRect(5,16,8,4);
-    ctx.shadowBlur=0;
   } else {
-    ctx.fillStyle = '#ffccaa';
-    ctx.fillRect(-12,-18,8,4);
-    ctx.fillRect(4,-18,8,4);
+    cx.fillStyle='rgba(255,200,150,0.8)';
+    cx.fillRect(-13,-20,8,4); cx.fillRect(5,-20,8,4);
   }
 
-  ctx.restore();
+  cx.restore();
 }
 
-function endGame() {
-  G.running = false;
-  cancelAnimationFrame(G.raf);
-  const earned = Math.round(G.sessionPts);
-  st.pts += earned;
-  st.energy = G.energy;
-  if (G.lapTimes.length) {
-    const best = Math.min(...G.lapTimes);
-    if (!st.best || best < st.best) st.best = best;
+/* ── END GAME ── */
+function endGame(){
+  G.running=false; cancelAnimationFrame(G.raf);
+  const earned=Math.round(G.pts);
+  st.pts+=earned; st.en=G.en;
+  if(G.lTimes.length){
+    const b=Math.min(...G.lTimes);
+    if(!st.best||b<st.best) st.best=b;
   }
-  saveSt();
-  document.getElementById('go-sl').textContent =
-    `Orbes: ${G.orbsGot} · Tiempo: ${fmtT(G.elapsed)}`;
-  document.getElementById('go-pts').textContent = '+'+fmt(earned);
-  document.getElementById('go-best').textContent = st.best ? `Mejor vuelta: ${fmtT(st.best)}` : '';
-  document.getElementById('gover').style.display = 'flex';
+  sv();
+  document.getElementById('go-sl').textContent=
+    `Orbes: ${G.orbs} · Combo máx: ×${Math.max(1,Math.floor(G.comboMax/3))} · ${fmtT(G.el)}`;
+  document.getElementById('go-pts').textContent='+'+fmt(earned);
+  document.getElementById('go-best').textContent=st.best?`Mejor vuelta: ${fmtT(st.best)}`:''
+  document.getElementById('gover').style.display='flex';
 }
 
-function laneShift(dir) {
-  G.targetLane = Math.max(0, Math.min(NLANES-1, G.targetLane + dir));
-  const id = dir<0 ? 'b-L' : 'b-R';
-  const btn = document.getElementById(id);
-  btn.classList.add('hit');
-  setTimeout(()=>btn.classList.remove('hit'), 150);
+/* ── CONTROLS ── */
+function laneShift(dir,e){
+  e&&e.preventDefault();
+  if(!G.running)return;
+  const prev=G.tLane;
+  G.tLane=Math.max(0,Math.min(NL-1,G.tLane+dir));
+  if(G.tLane!==prev) G.lane=prev;
+  const id=dir<0?'bL':'bR';
+  const b=document.getElementById(id);
+  b.classList.add('hit'); setTimeout(()=>b.classList.remove('hit'),140);
 }
-
-function boostPress(on) {
-  if (on && G.energy < 3) return;
-  G.boost = on;
+function bp(on,e){
+  e&&e.preventDefault();
+  if(!G.running)return;
+  if(on&&G.en<3)return;
+  if(on&&!G.boost){G.shake=10;G.boostFlash=15}
+  G.boost=on;
 }
-
-document.addEventListener('keydown', e => {
-  if (curScreen !== 'game') return;
-  if (e.key==='ArrowLeft')  laneShift(-1);
-  if (e.key==='ArrowRight') laneShift(1);
-  if (e.key===' '||e.key==='ArrowUp') { e.preventDefault(); boostPress(true); }
+document.addEventListener('keydown',e=>{
+  if(cur!=='game')return;
+  if(e.key==='ArrowLeft'){e.preventDefault();laneShift(-1)}
+  if(e.key==='ArrowRight'){e.preventDefault();laneShift(1)}
+  if(e.key===' '||e.key==='ArrowUp'){e.preventDefault();bp(true)}
 });
-document.addEventListener('keyup', e => {
-  if (curScreen !== 'game') return;
-  if (e.key===' '||e.key==='ArrowUp') boostPress(false);
+document.addEventListener('keyup',e=>{
+  if(cur!=='game')return;
+  if(e.key===' '||e.key==='ArrowUp') bp(false);
 });
+window.addEventListener('resize',()=>{if(cur==='game')startGame()});
 
-window.addEventListener('resize', () => {
-  if (curScreen==='game') startGame();
-});
-
-uiHome();
-<\/script>
+uiH();
+</script>
 </body>
 </html>
